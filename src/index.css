@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --color-japandi-canvas: #FBF9F5;
+  --color-japandi-surface: #FDF9F3;
+  --color-japandi-linen: #F5F1EB;
+  --color-japandi-container: #F1EDE7;
+  --color-japandi-stone: #E7E2DA;
+  --color-japandi-terracotta: #9E582C;
+  --color-japandi-terracotta-dark: #804116;
+  --color-japandi-espresso: #2A2825;
+  --color-japandi-wood: #D4A373;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #FBF9F5;
+  color: #1C1C18;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+h1, h2, h3, .font-editorial {
+  font-family: var(--font-serif);
+}
+
+/* Custom scrollbars matching Japandi minimalism */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #FBF9F5;
+}
+::-webkit-scrollbar-thumb {
+  background: #E7E2DA;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D4A373;
+}
