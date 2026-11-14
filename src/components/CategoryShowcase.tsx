@@ -1,10 +1,11 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import { PRODUCTS } from '../data/products';
+import { Product, PRODUCTS } from '../data/products';
 
 interface CategoryShowcaseProps {
   activeCategory: string;
   onSelectCategory: (category: string) => void;
+  products?: Product[];
 }
 
 interface CategoryTile {
@@ -76,10 +77,11 @@ const CATEGORY_TILES: CategoryTile[] = [
 export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
   activeCategory,
   onSelectCategory,
+  products = PRODUCTS,
 }) => {
   const getCountForCategory = (categoryId: CategoryTile['id']) => {
-    if (categoryId === 'all') return PRODUCTS.length;
-    return PRODUCTS.filter((p) => p.category === categoryId).length;
+    if (categoryId === 'all') return products.length;
+    return products.filter((p) => p.category === categoryId).length;
   };
 
   return (
@@ -102,7 +104,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
             </p>
           </div>
           <span className="text-xs uppercase tracking-[0.06em] font-semibold text-[#86736A]">
-            {PRODUCTS.length} Architectural Designs
+            {products.length} Architectural Designs
           </span>
         </div>
 

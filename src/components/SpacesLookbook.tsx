@@ -8,12 +8,14 @@ interface SpacesLookbookProps {
   onSelectProduct: (product: Product) => void;
   onAddToCart: (product: Product) => void;
   onOpenPlanner: () => void;
+  products?: Product[];
 }
 
 export const SpacesLookbook: React.FC<SpacesLookbookProps> = ({
   onSelectProduct,
   onAddToCart,
   onOpenPlanner,
+  products = PRODUCTS,
 }) => {
   const [activeSpaceId, setActiveSpaceId] = useState(SPACES[0].id);
   const [activeHotspot, setActiveHotspot] = useState<Hotspot | null>(null);
@@ -21,7 +23,7 @@ export const SpacesLookbook: React.FC<SpacesLookbookProps> = ({
   const activeSpace = SPACES.find((s) => s.id === activeSpaceId) || SPACES[0];
 
   const getProductForHotspot = (hotspot: Hotspot): Product | undefined => {
-    return PRODUCTS.find((p) => p.id === hotspot.productId);
+    return products.find((p) => p.id === hotspot.productId) || PRODUCTS.find((p) => p.id === hotspot.productId);
   };
 
   return (

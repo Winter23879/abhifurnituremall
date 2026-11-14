@@ -31,6 +31,7 @@ interface SpatialStudioProps {
   onAddBundleToCart: (items: PlacedPiece[]) => void;
   onViewProduct: (product: Product) => void;
   preselectedProduct?: Product | null;
+  products?: Product[];
 }
 
 const ROOM_TEMPLATES = [
@@ -44,6 +45,7 @@ export const SpatialStudio: React.FC<SpatialStudioProps> = ({
   onAddBundleToCart,
   onViewProduct,
   preselectedProduct,
+  products = PRODUCTS,
 }) => {
   const [selectedTemplate, setSelectedTemplate] = useState('living');
   const [roomWidth, setRoomWidth] = useState(5.2);
@@ -458,7 +460,7 @@ export const SpatialStudio: React.FC<SpatialStudioProps> = ({
               </div>
 
               <div className="space-y-3 max-h-[360px] overflow-y-auto pr-1">
-                {PRODUCTS.map((prod) => (
+                {products.map((prod) => (
                   <div
                     key={prod.id}
                     className="p-3 rounded-[4px] border border-[#E7E2DA] bg-[#FBF9F5] hover:bg-[#FFFFFF] hover:border-[#D4A373] transition-all flex items-center justify-between"

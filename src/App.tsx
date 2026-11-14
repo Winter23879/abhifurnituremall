@@ -5,9 +5,12 @@ import {
   OrderRecord,
   ShowroomVisitRecord,
   SwatchRequestRecord,
+  AdminAuthSession,
   STORAGE_KEYS,
   loadStoredJson,
   saveStoredJson,
+  getAdminSession,
+  clearAdminSession,
 } from './utils/storage';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
@@ -24,6 +27,8 @@ import { CartDrawer } from './components/CartDrawer';
 import { WishlistDrawer } from './components/WishlistDrawer';
 import { SampleKitModal } from './components/SampleKitModal';
 import { ShowroomVisitModal } from './components/ShowroomVisitModal';
+import { AdminDashboard } from './components/AdminDashboard';
+import { AdminLoginModal } from './components/AdminLoginModal';
 import { Footer } from './components/Footer';
 
 const DEFAULT_CART_ITEMS: CartItem[] = [
@@ -41,7 +46,7 @@ const DEFAULT_CART_ITEMS: CartItem[] = [
 ];
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'home' | 'catalog' | 'spaces' | 'planner' | 'craft'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'catalog' | 'spaces' | 'planner' | 'craft' | 'admin'>('home');
   const [selectedDetailProduct, setSelectedDetailProduct] = useState<Product | null>(null);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -49,6 +54,15 @@ export default function App() {
   const [isSampleKitOpen, setIsSampleKitOpen] = useState(false);
   const [isVisitModalOpen, setIsVisitModalOpen] = useState(false);
   const [plannerPreselectedProduct, setPlannerPreselectedProduct] = useState<Product | null>(null);
+
+  // Admin Studio State
+  const [adminSession, setAdminSessionState] = useState<AdminAuthSession | null>(() => getAdminSession());
+  const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
+
+  // Live Catalog State (Backed by LocalStorage, defaulting to handcrafted collection)
+  const [products, setProducts] = useState<Product[]>(() =>
+    loadStoredJson<Product[]>(STORAGE_KEYS.products, PRODUCTS)
+  );
 
   // Persistent Storefront State (ready to swap for backend API + User Dashboard)
   const [cartItems, setCartItems] = useState<CartItem[]>(() =>
@@ -66,6 +80,10 @@ export default function App() {
   const [showroomVisits, setShowroomVisits] = useState<ShowroomVisitRecord[]>(() =>
     loadStoredJson<ShowroomVisitRecord[]>(STORAGE_KEYS.visits, [])
   );
+
+  useEffect(() => {
+    saveStoredJson(STORAGE_KEYS.products, products);
+  }, [products]);
 
   useEffect(() => {
     saveStoredJson(STORAGE_KEYS.cart, cartItems);
@@ -86,6 +104,51 @@ export default function App() {
   useEffect(() => {
     saveStoredJson(STORAGE_KEYS.visits, showroomVisits);
   }, [showroomVisits]);
+
+  // Admin Product CRUD Actions
+  const handleAdminAddProduct = (newProduct: Product) => {
+    setProducts((prev) => [newProduct, ...prev]);
+  };
+
+  const handleAdminUpdateProduct = (updatedProduct: Product) => {
+    setProducts((prev) =>
+      prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
+    );
+    if (selectedDetailProduct?.id === updatedProduct.id) {
+      setSelectedDetailProduct(updatedProduct);
+    }
+  };
+
+  const handleAdminDeleteProduct = (productId: string) => {
+    setProducts((prev) => prev.filter((p) => p.id !== productId));
+    setWishlistIds((prev) => prev.filter((id) => id !== productId));
+    if (selectedDetailProduct?.id === productId) {
+      setSelectedDetailProduct(null);
+    }
+  };
+
+  const handleAdminResetCatalog = () => {
+    setProducts(PRODUCTS);
+    saveStoredJson(STORAGE_KEYS.products, PRODUCTS);
+  };
+
+  const handleAdminLogout = () => {
+    clearAdminSession();
+    setAdminSessionState(null);
+    setActiveTab('catalog');
+  };
+
+  const handleOpenAdminTrigger = () => {
+    const currentSession = getAdminSession();
+    if (currentSession?.isAuthenticated) {
+      setAdminSessionState(currentSession);
+      setActiveTab('admin');
+      setSelectedDetailProduct(null);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      setIsAdminLoginOpen(true);
+    }
+  };
 
   // Selected Category for Full-Screen Store View
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -161,7 +224,7 @@ export default function App() {
 
   const handleAddBundleToCart = (placedPieces: PlacedPiece[]) => {
     placedPieces.forEach((piece) => {
-      const matchedProd = PRODUCTS.find((p) => p.id === piece.productId);
+      const matchedProd = products.find((p) => p.id === piece.productId);
       if (matchedProd) {
         const newItemId = `${piece.productId}-${piece.woodColor}-${Date.now()}`;
         setCartItems((prev) => [
@@ -189,7 +252,7 @@ export default function App() {
   };
 
   const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
-  const wishlistProducts = PRODUCTS.filter((p) => wishlistIds.includes(p.id));
+  const wishlistProducts = products.filter((p) => wishlistIds.includes(p.id));
 
   return (
     <div className="min-h-screen bg-[#FBF9F5] text-[#1C1C18] flex flex-col font-sans selection:bg-[#9E582C]/20 selection:text-[#804116]">
@@ -206,6 +269,8 @@ export default function App() {
         onOpenWishlist={() => setIsWishlistOpen(true)}
         onOpenSampleKit={() => setIsSampleKitOpen(true)}
         onOpenVisitModal={() => setIsVisitModalOpen(true)}
+        onOpenAdmin={handleOpenAdminTrigger}
+        isAdminLoggedIn={Boolean(adminSession?.isAuthenticated)}
       />
 
       {/* Main View Switcher */}
@@ -221,9 +286,51 @@ export default function App() {
             isWishlisted={wishlistIds.includes(selectedDetailProduct.id)}
             onToggleWishlist={handleToggleWishlist}
           />
+        ) : activeTab === 'admin' ? (
+          /* Admin Dashboard: Full-Browser Item Management & Lead Viewer */
+          adminSession?.isAuthenticated ? (
+            <AdminDashboard
+              products={products}
+              onAddProduct={handleAdminAddProduct}
+              onUpdateProduct={handleAdminUpdateProduct}
+              onDeleteProduct={handleAdminDeleteProduct}
+              onResetDefaultCatalog={handleAdminResetCatalog}
+              onPreviewProduct={(p) => {
+                setSelectedDetailProduct(p);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              onLogout={handleAdminLogout}
+              onBackToStore={() => {
+                setActiveTab('catalog');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              orders={orders}
+              swatches={swatchRequests}
+              visits={showroomVisits}
+            />
+          ) : (
+            <div className="max-w-md mx-auto py-24 px-4 text-center space-y-5">
+              <div className="w-12 h-12 mx-auto rounded-full bg-[#9E582C]/10 border border-[#9E582C]/20 flex items-center justify-center text-[#9E582C]">
+                <span className="font-serif font-bold text-lg">AFH</span>
+              </div>
+              <h2 className="font-serif text-3xl font-medium text-[#1C1C18]">
+                Staff & Studio Authentication
+              </h2>
+              <p className="text-xs text-[#53433B] leading-relaxed">
+                Administrative session is required to manage pieces, modify inventory, or view submitted orders.
+              </p>
+              <button
+                onClick={() => setIsAdminLoginOpen(true)}
+                className="py-3 px-8 bg-[#9E582C] text-[#FBF9F5] text-xs font-semibold uppercase tracking-wider rounded-[4px] hover:bg-[#804116] shadow-sm transition-all cursor-pointer"
+              >
+                Sign In to Admin Studio
+              </button>
+            </div>
+          )
         ) : activeTab === 'spaces' ? (
           /* Lookbook & Spaces with Interactive Hotspot Pins */
           <SpacesLookbook
+            products={products}
             onSelectProduct={(p) => setSelectedDetailProduct(p)}
             onAddToCart={(p) => handleAddToCart(p)}
             onOpenPlanner={() => setActiveTab('planner')}
@@ -231,6 +338,7 @@ export default function App() {
         ) : activeTab === 'planner' ? (
           /* Interactive Sanctuary Spatial Studio / 2D Room Planner */
           <SpatialStudio
+            products={products}
             onAddBundleToCart={handleAddBundleToCart}
             onViewProduct={(p) => setSelectedDetailProduct(p)}
             preselectedProduct={plannerPreselectedProduct}
@@ -244,7 +352,7 @@ export default function App() {
         ) : activeTab === 'catalog' ? (
           /* Full-Screen Store Page with Left-Hand Filters */
           <StorePage
-            products={PRODUCTS}
+            products={products}
             selectedCategory={selectedCategory}
             onSelectCategory={(cat) => setSelectedCategory(cat)}
             onBackHome={() => {
@@ -270,6 +378,7 @@ export default function App() {
             <CategoryShowcase
               activeCategory=""
               onSelectCategory={(cat) => openStoreCategory(cat)}
+              products={products}
             />
 
             {/* Material & Spatial Planner Teaser Banner */}
@@ -370,6 +479,18 @@ export default function App() {
         onSubmitted={(visit) => setShowroomVisits((prev) => [visit, ...prev])}
       />
 
+      {/* Admin Studio Login Modal */}
+      <AdminLoginModal
+        isOpen={isAdminLoginOpen}
+        onClose={() => setIsAdminLoginOpen(false)}
+        onSuccess={() => {
+          setAdminSessionState(getAdminSession());
+          setActiveTab('admin');
+          setSelectedDetailProduct(null);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+
       {/* Architectural Studio Footer */}
       <Footer
         onSelectCategory={(cat) => openStoreCategory(cat)}
@@ -380,6 +501,7 @@ export default function App() {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         onOpenVisitModal={() => setIsVisitModalOpen(true)}
+        onOpenAdmin={handleOpenAdminTrigger}
       />
     </div>
   );

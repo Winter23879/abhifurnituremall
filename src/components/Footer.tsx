@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { CheckCircle, Phone, Mail, Calendar, MessageCircle } from 'lucide-react';
+import { CheckCircle, Phone, Mail, Calendar, MessageCircle, ShieldCheck } from 'lucide-react';
 
 interface FooterProps {
   onSelectCategory: (cat: string) => void;
   onOpenSampleKit: () => void;
   onOpenPlanner: () => void;
   onOpenVisitModal?: () => void;
+  onOpenAdmin?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -13,6 +14,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenSampleKit,
   onOpenPlanner,
   onOpenVisitModal,
+  onOpenAdmin,
 }) => {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
@@ -209,6 +211,19 @@ export const Footer: React.FC<FooterProps> = ({
               Sample Box Request
             </button>
             <span>·</span>
+            {onOpenAdmin && (
+              <>
+                <button
+                  type="button"
+                  onClick={onOpenAdmin}
+                  className="hover:text-[#D4A373] text-[#CBC6C1] inline-flex items-center space-x-1 transition-colors cursor-pointer"
+                >
+                  <ShieldCheck className="w-3 h-3 text-[#D4A373]" />
+                  <span>Admin Studio</span>
+                </button>
+                <span>·</span>
+              </>
+            )}
             <span>100% FSC Forest Stewardship</span>
             <span>·</span>
             <span>Zero Polyurethane Finishes</span>
