@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { CheckCircle, Phone, Mail, Calendar, MessageCircle, ShieldCheck } from 'lucide-react';
+import { Phone, Mail, MapPin, Calendar, Sparkles, CheckCircle2 } from 'lucide-react';
 
 interface FooterProps {
   onSelectCategory: (cat: string) => void;
   onOpenSampleKit: () => void;
   onOpenPlanner: () => void;
   onOpenVisitModal?: () => void;
-  onOpenAdmin?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -14,206 +13,215 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenSampleKit,
   onOpenPlanner,
   onOpenVisitModal,
-  onOpenAdmin,
 }) => {
-  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newsletterEmail) return;
+    if (!email) return;
     setSubscribed(true);
     setTimeout(() => {
-      setNewsletterEmail('');
+      setEmail('');
       setSubscribed(false);
     }, 4000);
   };
 
   return (
-    <footer className="bg-[#2A2825] text-[#F5F1EB] pt-16 pb-12 border-t border-[#31302D]">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 space-y-12">
-        {/* Top Section */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 border-b border-[#494643] pb-12">
-          {/* Brand & Manifesto */}
-          <div className="md:col-span-5 space-y-4">
-            <div className="inline-flex flex-col items-center text-center">
-              <div className="flex items-center space-x-2.5">
-                <span className="w-4 h-[1px] bg-[#D4A373]" />
-                <span className="font-serif text-3xl font-semibold tracking-[0.22em] pl-[0.22em] leading-none text-[#D4A373]">
-                  AFH
-                </span>
-                <span className="w-4 h-[1px] bg-[#D4A373]" />
-              </div>
-              <p className="mt-1.5 text-[10px] tracking-[0.18em] uppercase text-[#F5F1EB] font-semibold">
-                Abhi Furniture Hall
-              </p>
+    <footer className="bg-[#1C1C18] text-[#E7E2DA] border-t border-[#31302D] font-sans">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 py-12 lg:py-16">
+        {/* Main 4-Column Grid: Balanced & Perfectly Aligned */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 pb-12 border-b border-[#31302D]">
+          {/* Column 1: Brand & Contact */}
+          <div className="space-y-4">
+            <div>
+              <span className="font-serif text-2xl font-semibold tracking-wider text-white">
+                ABHI
+              </span>
+              <span className="text-[10px] uppercase tracking-[0.24em] font-semibold text-[#D4A373] block mt-0.5">
+                Furniture Mall
+              </span>
             </div>
-            <p className="text-xs text-[#CBC6C1] leading-relaxed max-w-sm">
-              We create serene architectural objects that honor the quiet geometry of Japanese timber craftsmanship and the organic honesty of Danish design. Handcrafted by master sashimono artisans.
+
+            <p className="text-xs text-[#A8A29E] leading-relaxed">
+              Handcrafted solid wood furniture designed for modern Indian homes. Ethically sourced certified timber built to last generations.
             </p>
+
+            <div className="space-y-2 pt-1 text-xs text-[#CBC6C1]">
+              <a
+                href="tel:+918662489100"
+                className="flex items-center space-x-2 hover:text-[#D4A373] transition-colors"
+              >
+                <Phone className="w-3.5 h-3.5 text-[#D4A373] shrink-0" />
+                <span>+91 866 248 9100</span>
+              </a>
+
+              <a
+                href="mailto:support@abhifurnituremall.in"
+                className="flex items-center space-x-2 hover:text-[#D4A373] transition-colors"
+              >
+                <Mail className="w-3.5 h-3.5 text-[#D4A373] shrink-0" />
+                <span>support@abhifurnituremall.in</span>
+              </a>
+
+              <div className="flex items-center space-x-2 text-[#A8A29E]">
+                <MapPin className="w-3.5 h-3.5 text-[#D4A373] shrink-0" />
+                <span>Andhra Pradesh, India</span>
+              </div>
+            </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="md:col-span-3 space-y-3">
-            <h4 className="text-xs uppercase tracking-[0.08em] font-semibold text-[#D4A373]">
-              Atelier Collections
+          {/* Column 2: Shop Categories */}
+          <div className="space-y-3.5">
+            <h4 className="text-xs uppercase tracking-wider font-semibold text-white">
+              Shop Furniture
             </h4>
-            <ul className="space-y-2 text-xs text-[#CBC6C1]">
+            <ul className="space-y-2 text-xs text-[#A8A29E]">
               <li>
                 <button
                   onClick={() => onSelectCategory('living')}
-                  className="hover:text-[#FFFFFF] transition-colors"
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
-                  Living Sanctuaries & Lounges
+                  Living Room & Sofas
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => onSelectCategory('dining')}
-                  className="hover:text-[#FFFFFF] transition-colors"
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
-                  Dining Tables & Woven Seating
+                  Dining Tables & Chairs
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => onSelectCategory('bedroom')}
-                  className="hover:text-[#FFFFFF] transition-colors"
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
-                  Platform Beds & Tatami Suites
+                  Beds & Bedroom Suites
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => onSelectCategory('study')}
+                  className="hover:text-white transition-colors cursor-pointer"
+                >
+                  Desks & Workspaces
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => onSelectCategory('lighting')}
-                  className="hover:text-[#FFFFFF] transition-colors"
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
-                  Washi Paper Luminaires
+                  Lighting & Decor
                 </button>
               </li>
               <li>
                 <button
-                  onClick={onOpenPlanner}
-                  className="hover:text-[#D4A373] transition-colors text-[#F5F1EB]"
+                  onClick={() => onSelectCategory('all')}
+                  className="text-[#D4A373] hover:underline transition-colors cursor-pointer font-medium"
                 >
-                  Spatial Studio (Room Planner) →
+                  View All Pieces →
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Newsletter / Architectural Monograph */}
-          <div className="md:col-span-4 space-y-3">
-            <h4 className="text-xs uppercase tracking-[0.08em] font-semibold text-[#D4A373]">
-              The Architectural Monograph
+          {/* Column 3: Customer Services & Tools */}
+          <div className="space-y-3.5">
+            <h4 className="text-xs uppercase tracking-wider font-semibold text-white">
+              Customer Services
             </h4>
-            <p className="text-xs text-[#CBC6C1] leading-relaxed">
-              Receive quarterly essays on timber joinery, quiet interiors, and upcoming limited releases.
+            <ul className="space-y-2 text-xs text-[#A8A29E]">
+              <li>
+                <button
+                  onClick={onOpenPlanner}
+                  className="hover:text-white transition-colors cursor-pointer"
+                >
+                  2D Room Planner
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={onOpenSampleKit}
+                  className="hover:text-white transition-colors cursor-pointer"
+                >
+                  Order Free Swatch Samples
+                </button>
+              </li>
+              {onOpenVisitModal && (
+                <li>
+                  <button
+                    onClick={onOpenVisitModal}
+                    className="hover:text-white transition-colors cursor-pointer"
+                  >
+                    Book Showroom Visit
+                  </button>
+                </li>
+              )}
+              <li className="pt-2 text-[11px] text-[#A8A29E] space-y-1">
+                <div className="text-white font-medium">Delivery Coverage:</div>
+                <div>Free delivery over ₹75,000 across Andhra Pradesh, Telangana & Pan-India.</div>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Showrooms & Newsletter */}
+          <div className="space-y-3.5">
+            <h4 className="text-xs uppercase tracking-wider font-semibold text-white">
+              Stay Connected
+            </h4>
+
+            <p className="text-xs text-[#A8A29E] leading-relaxed">
+              Subscribe to get design updates, new seasonal arrivals, and showroom event invitations.
             </p>
 
             {subscribed ? (
-              <div className="p-3 bg-[#31302D] rounded-[4px] border border-[#6D533E] text-xs text-[#D4A373] flex items-center space-x-2">
-                <CheckCircle className="w-4 h-4 text-[#9E582C]" />
-                <span>You are enrolled in the Monograph journal.</span>
+              <div className="p-2.5 bg-emerald-950/60 border border-emerald-800 text-emerald-200 text-xs rounded flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>Thank you! You are subscribed.</span>
               </div>
             ) : (
-              <form onSubmit={handleSubscribe} className="flex gap-2">
-                <input
-                  type="email"
-                  required
-                  value={newsletterEmail}
-                  onChange={(e) => setNewsletterEmail(e.target.value)}
-                  placeholder="you@example.in"
-                  className="flex-1 p-2.5 text-xs bg-[#1C1C18] border border-[#494643] rounded-[4px] text-[#FFFFFF] placeholder:text-[#86736A] focus:outline-none focus:border-[#9E582C]"
-                />
-                <button
-                  type="submit"
-                  className="py-2.5 px-4 bg-[#9E582C] text-[#FBF9F5] text-xs font-semibold uppercase tracking-wider rounded-[4px] hover:bg-[#804116] transition-colors"
-                >
-                  Join
-                </button>
+              <form onSubmit={handleSubscribe} className="space-y-2">
+                <div className="flex">
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    className="w-full px-3 py-2 text-xs bg-[#2A2825] border border-[#494643] rounded-l text-white placeholder:text-[#86736A] focus:outline-none focus:border-[#D4A373]"
+                  />
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-[#9E582C] hover:bg-[#804116] text-white text-xs font-semibold uppercase tracking-wider rounded-r transition-colors cursor-pointer shrink-0"
+                  >
+                    Join
+                  </button>
+                </div>
               </form>
             )}
+
+            <div className="pt-2 text-[11px] text-[#A8A29E] space-y-1">
+              <span className="text-white font-medium block">Experience Showrooms:</span>
+              <div>Vijayawada · Visakhapatnam · Tirupati</div>
+            </div>
           </div>
         </div>
 
-        {/* Showrooms & Ateliers */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-xs text-[#CBC6C1] border-b border-[#494643] pb-10">
+        {/* Bottom Bar: Clean, Single Line Alignment */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#86736A]">
           <div>
-            <span className="font-semibold text-[#FFFFFF] block mb-1 uppercase tracking-wider">
-              Vijayawada Flagship Showroom
-            </span>
-            <p>40-1-52 MG Road, Benz Circle</p>
-            <p>Vijayawada, Andhra Pradesh 520010, India</p>
-            <p className="text-[#86736A] mt-1">Tuesday–Sunday · By Appointment</p>
+            © {new Date().getFullYear()} Abhi Furniture Mall. All rights reserved.
           </div>
 
-          <div>
-            <span className="font-semibold text-[#FFFFFF] block mb-1 uppercase tracking-wider">
-              Visakhapatnam Coastal Studio
-            </span>
-            <p>14-2-8 Beach Road, Siripuram</p>
-            <p>Visakhapatnam, Andhra Pradesh 530003, India</p>
-            <p className="text-[#86736A] mt-1">Monday–Saturday · Walk-ins Welcome</p>
-          </div>
-
-          <div>
-            <span className="font-semibold text-[#FFFFFF] block mb-1 uppercase tracking-wider">
-              Tirupati Design Hall
-            </span>
-            <p>22 Air Bypass Road, Karakambadi</p>
-            <p>Tirupati, Andhra Pradesh 517501, India</p>
-            <p className="text-[#86736A] mt-1">Architectural Consultations Daily</p>
-          </div>
-        </div>
-
-        {/* Contact Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#494643] pb-8 text-xs text-[#CBC6C1]">
-          <div className="flex flex-wrap items-center gap-6">
-            <a href="tel:+918662489100" className="inline-flex items-center space-x-2 hover:text-[#FFFFFF] transition-colors">
-              <Phone className="w-3.5 h-3.5 text-[#D4A373]" />
-              <span>+91 866 248 9100</span>
-            </a>
-            <a href="mailto:studio@abhifurniturehall.in" className="inline-flex items-center space-x-2 hover:text-[#FFFFFF] transition-colors">
-              <Mail className="w-3.5 h-3.5 text-[#D4A373]" />
-              <span>studio@abhifurniturehall.in</span>
-            </a>
-            <a
-              href="https://wa.me/918662489100"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center space-x-2 hover:text-[#FFFFFF] transition-colors"
-            >
-              <MessageCircle className="w-3.5 h-3.5 text-[#D4A373]" />
-              <span>WhatsApp Showroom Desk</span>
-            </a>
-          </div>
-
-          {onOpenVisitModal && (
-            <button
-              type="button"
-              onClick={onOpenVisitModal}
-              className="inline-flex items-center space-x-2 py-2 px-4 rounded-[4px] border border-[#D4A373]/60 text-[#F5F1EB] hover:bg-[#9E582C] hover:border-[#9E582C] text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
-            >
-              <Calendar className="w-3.5 h-3.5" />
-              <span>Book Showroom Visit</span>
-            </button>
-          )}
-        </div>
-
-        {/* Bottom Rights */}
-        <div className="flex flex-col sm:flex-row justify-between items-center text-xs text-[#86736A] gap-4">
-          <div>
-            © {new Date().getFullYear()} AFH — Abhi Furniture Hall. All rights reserved.
-          </div>
-          <div className="flex items-center space-x-6 text-[11px]">
-            <button onClick={onOpenSampleKit} className="hover:text-[#FFFFFF] transition-colors cursor-pointer">
-              Sample Box Request
-            </button>
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-[11px]">
+            <span>100% Solid Certified Timber</span>
             <span>·</span>
-            <span>100% FSC Forest Stewardship</span>
+            <span>White-Glove Assembly</span>
             <span>·</span>
-            <span>Zero Polyurethane Finishes</span>
+            <span>10-Year Warranty</span>
           </div>
         </div>
       </div>

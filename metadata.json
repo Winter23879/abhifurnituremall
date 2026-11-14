@@ -1,6 +1,6 @@
 {
-  "name": "AFH — Abhi Furniture Hall",
-  "description": "Abhi Furniture Hall (AFH) — Curated architectural furniture studio and spatial planner in Andhra Pradesh, India.",
+  "name": "Abhi Furniture Mall",
+  "description": "Abhi Furniture Mall — Curated architectural furniture studio and spatial planner in Andhra Pradesh, India.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

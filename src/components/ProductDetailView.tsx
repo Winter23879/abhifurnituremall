@@ -77,8 +77,8 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
 
   const handleDownloadSpec = () => {
     const specContent = [
-      'ABHI FURNITURE HALL (AFH) — ARCHITECTURAL SPECIFICATION',
-      '========================================================',
+      'ABHI FURNITURE MALL — ARCHITECTURAL SPECIFICATION',
+      '==================================================',
       `Piece: ${product.name} (${product.japaneseName})`,
       `Category: ${product.category.toUpperCase()}`,
       `Selected Timber: ${selectedWood.name}`,
@@ -91,7 +91,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
       `Lead Time: ${product.leadTime}`,
       '',
       'Showrooms: Vijayawada · Visakhapatnam · Tirupati, Andhra Pradesh',
-      'Contact: +91 866 248 9100 | studio@abhifurniturehall.in',
+      'Contact: +91 866 248 9100 | support@abhifurnituremall.in',
     ]
       .filter(Boolean)
       .join('\n');
