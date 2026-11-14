@@ -1,28 +1,16 @@
 import React, { useState } from 'react';
-import {
-  MessageCircle,
-  X,
-  Send,
-  ShieldCheck,
-  Sparkles,
-  CheckCircle2,
-  Clock,
-  HelpCircle,
-  User,
-  Phone,
-  MessageSquare,
-} from 'lucide-react';
+import { MessageCircle, X, Send, CheckCircle2, Sparkles, Shield } from 'lucide-react';
 import { ChatInquiryRecord } from '../utils/storage';
 
 interface WhatsAppChatWidgetProps {
   onInquirySubmitted: (record: ChatInquiryRecord) => void;
 }
 
-const STARTER_PROMPTS = [
-  'Is the Komorebi Lounge Chair in stock?',
-  'Can I customize dimensions for the Sora Dining Table?',
-  'What is the delivery timeline to Vijayawada / Vizag?',
-  'I would like to order a complimentary timber swatch kit.',
+const QUICK_TOPICS = [
+  'Check piece availability',
+  'Custom dimensions & finishes',
+  'Delivery timeline to my city',
+  'Book a showroom visit',
 ];
 
 export const WhatsAppChatWidget: React.FC<WhatsAppChatWidgetProps> = ({
@@ -30,9 +18,8 @@ export const WhatsAppChatWidget: React.FC<WhatsAppChatWidgetProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
-  const [contact, setContact] = useState('');
+  const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
-  const [category, setCategory] = useState('Stock & Customization');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -42,15 +29,15 @@ export const WhatsAppChatWidget: React.FC<WhatsAppChatWidgetProps> = ({
     setError(null);
 
     if (!name.trim()) {
-      setError('Please provide your name.');
+      setError('Please enter your name.');
       return;
     }
-    if (!contact.trim()) {
-      setError('Please provide your WhatsApp number or email for reply.');
+    if (!phone.trim()) {
+      setError('Please enter your WhatsApp or phone number.');
       return;
     }
     if (!message.trim()) {
-      setError('Please type your inquiry or question.');
+      setError('Please enter your question.');
       return;
     }
 
@@ -60,26 +47,22 @@ export const WhatsAppChatWidget: React.FC<WhatsAppChatWidgetProps> = ({
       id: `inq-${Date.now().toString().slice(-6)}`,
       createdAt: new Date().toISOString(),
       clientName: name.trim(),
-      clientContact: contact.trim(),
+      clientContact: phone.trim(),
       message: message.trim(),
-      category,
+      category: 'Store Inquiry',
       status: 'new',
     };
 
     try {
-      // Send to serverless API endpoint (relays to WhatsApp without exposing recipient number)
       await fetch('/api/whatsapp-inquiry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(record),
       }).catch((err) => {
-        // Silently continue so client experience never breaks even if offline/local
-        console.warn('API relay dispatched locally:', err);
+        console.warn('Inquiry queued locally:', err);
       });
 
-      // Save locally into Admin Studio leads queue
       onInquirySubmitted(record);
-
       setIsSubmitting(false);
       setIsSubmitted(true);
     } catch {
@@ -101,200 +84,155 @@ export const WhatsAppChatWidget: React.FC<WhatsAppChatWidgetProps> = ({
         {!isOpen && (
           <button
             onClick={() => setIsOpen(true)}
-            aria-label="Open WhatsApp Showroom Concierge"
-            className="group relative flex items-center space-x-2.5 bg-[#25D366] hover:bg-[#20BA5A] text-[#FFFFFF] px-4 py-3 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer focus:outline-none"
+            aria-label="Chat on WhatsApp"
+            className="flex items-center space-x-2 bg-[#25D366] hover:bg-[#20BA5A] text-white px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 cursor-pointer focus:outline-none"
           >
-            {/* Pulsing Live Ping */}
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FFFFFF] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-[#FFFFFF]"></span>
-            </span>
-
-            <MessageCircle className="w-5 h-5" />
-            <span className="text-xs font-semibold tracking-wider uppercase font-sans pr-1 hidden sm:inline">
-              Ask Showroom Desk
+            <MessageCircle className="w-5 h-5 fill-current" />
+            <span className="text-xs font-semibold tracking-wide">
+              Chat with us
             </span>
           </button>
         )}
       </div>
 
-      {/* Floating Chat Modal / Drawer */}
+      {/* WhatsApp Chat Box */}
       {isOpen && (
-        <div className="fixed bottom-6 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[380px] max-h-[85vh] bg-[#FFFFFF] border border-[#E7E2DA] rounded-[8px] shadow-2xl overflow-hidden flex flex-col text-[#1C1C18] animate-fadeIn">
+        <div className="fixed bottom-6 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[360px] bg-white rounded-2xl shadow-2xl overflow-hidden border border-[#E7E2DA] flex flex-col animate-fadeIn font-sans">
           {/* Header */}
-          <div className="bg-[#2A2825] text-[#F5F1EB] p-4 flex items-center justify-between border-b border-[#3B3835]">
+          <div className="bg-[#075E54] text-white px-4 py-3.5 flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 rounded-full bg-[#25D366]/20 border border-[#25D366]/40 flex items-center justify-center text-[#25D366]">
-                <MessageCircle className="w-5 h-5" />
+              <div className="relative">
+                <div className="w-10 h-10 rounded-full bg-[#128C7E] flex items-center justify-center font-serif font-bold text-white text-sm border border-white/20">
+                  AF
+                </div>
+                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#25D366] border-2 border-[#075E54] rounded-full" />
               </div>
               <div>
-                <div className="flex items-center space-x-1.5">
-                  <h3 className="font-serif text-sm font-semibold tracking-wide">
-                    AFH Showroom Concierge
-                  </h3>
-                  <span className="w-2 h-2 rounded-full bg-[#25D366] inline-block" title="Online" />
-                </div>
-                <p className="text-[10px] text-[#CBC6C1] tracking-wider uppercase">
-                  WhatsApp Direct Relay · Confidential
+                <h3 className="font-semibold text-sm leading-tight text-white">
+                  Abhi Furniture Mall
+                </h3>
+                <p className="text-[11px] text-emerald-100">
+                  Typically replies in a few minutes
                 </p>
               </div>
             </div>
 
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1 rounded-full text-[#CBC6C1] hover:text-[#FFFFFF] hover:bg-[#3B3835] transition-colors cursor-pointer"
+              className="p-1 rounded-full text-emerald-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
               aria-label="Close chat"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Privacy Guarantee Notice */}
-          <div className="bg-[#F5F1EB] px-3.5 py-1.5 border-b border-[#E7E2DA] text-[10.5px] text-[#53433B] flex items-center justify-between">
-            <div className="flex items-center space-x-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#25D366] shrink-0" />
-              <span>Private Relay (Receiver number protected)</span>
-            </div>
-            <span className="text-[#86736A] font-mono">100% Free</span>
-          </div>
-
-          {/* Body */}
-          <div className="p-4 overflow-y-auto flex-1 space-y-4 text-xs">
+          {/* Chat Body */}
+          <div className="p-4 bg-[#ECE5DD]/40 flex-1 space-y-3.5 max-h-[70vh] overflow-y-auto">
             {isSubmitted ? (
-              /* Success Screen */
-              <div className="py-6 text-center space-y-3 animate-fadeIn">
-                <div className="w-12 h-12 mx-auto rounded-full bg-[#25D366]/10 border border-[#25D366]/30 flex items-center justify-center text-[#25D366]">
+              /* Success Confirmation */
+              <div className="bg-white rounded-xl p-6 text-center space-y-3 shadow-xs">
+                <div className="w-12 h-12 mx-auto rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
-                <h4 className="font-serif text-lg font-medium text-[#1C1C18]">
-                  Inquiry Dispatched!
+                <h4 className="font-semibold text-base text-[#1C1C18]">
+                  Message Sent!
                 </h4>
-                <p className="text-[#53433B] text-xs leading-relaxed max-w-xs mx-auto">
-                  Our Andhra Pradesh showroom desk has received your note on WhatsApp. An architect will message <strong className="text-[#1C1C18]">{contact}</strong> shortly.
+                <p className="text-xs text-[#53433B] leading-relaxed">
+                  Thanks, <strong className="text-[#1C1C18]">{name}</strong>. Our team has received your inquiry and will reply to <strong className="text-[#1C1C18]">{phone}</strong> on WhatsApp shortly.
                 </p>
-                <div className="pt-2">
-                  <button
-                    onClick={handleReset}
-                    className="py-2 px-4 text-xs font-semibold uppercase tracking-wider text-[#9E582C] border border-[#9E582C] rounded-[4px] hover:bg-[#9E582C] hover:text-[#FFFFFF] transition-colors cursor-pointer"
-                  >
-                    Send Another Question
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  className="mt-2 text-xs font-semibold text-[#075E54] hover:underline cursor-pointer"
+                >
+                  Send another message
+                </button>
               </div>
             ) : (
-              /* Chat Dialogue & Form */
               <>
-                {/* Simulated Studio Greeting */}
-                <div className="flex items-start space-x-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[#9E582C] text-[#FFFFFF] text-[10px] font-bold flex items-center justify-center shrink-0">
-                    AFH
-                  </div>
-                  <div className="bg-[#F5F1EB] p-3 rounded-2xl rounded-tl-none border border-[#E7E2DA] text-xs leading-relaxed max-w-[85%]">
-                    <p className="font-serif text-[11px] font-medium text-[#804116] mb-1">
-                      Namaskaram · శిల్పకళా విభాగం
-                    </p>
-                    <p className="text-[#1C1C18]">
-                      Welcome to Abhi Furniture Mall. How can our spatial team assist with your residence today?
+                {/* Greeting Bubble */}
+                <div className="flex items-start space-x-2">
+                  <div className="bg-white p-3.5 rounded-2xl rounded-tl-xs shadow-xs text-xs text-[#1C1C18] space-y-1 max-w-[90%] border border-[#E7E2DA]/50">
+                    <p className="font-medium text-[#075E54]">Hello! 👋</p>
+                    <p className="text-[#53433B] leading-relaxed">
+                      Welcome to Abhi Furniture Mall. Have a question about our pieces, customization, or delivery? Message us here!
                     </p>
                   </div>
                 </div>
 
-                {/* Quick Prompts */}
+                {/* Quick Topics */}
                 <div className="space-y-1.5 pt-1">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-[#86736A] flex items-center space-x-1">
-                    <Sparkles className="w-3 h-3 text-[#9E582C]" />
-                    <span>Frequently Asked:</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[#86736A] block">
+                    Quick suggestions:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
-                    {STARTER_PROMPTS.map((prompt, idx) => (
+                    {QUICK_TOPICS.map((topic, idx) => (
                       <button
                         key={idx}
                         type="button"
-                        onClick={() => setMessage(prompt)}
-                        className="text-left text-[11px] bg-[#FBF9F5] hover:bg-[#F5F1EB] border border-[#E7E2DA] hover:border-[#D4A373] text-[#53433B] hover:text-[#1C1C18] px-2.5 py-1.5 rounded-[4px] transition-all cursor-pointer leading-tight"
+                        onClick={() => setMessage(topic)}
+                        className="text-[11px] bg-white hover:bg-emerald-50 hover:border-emerald-300 border border-[#E7E2DA] text-[#53433B] hover:text-[#075E54] px-2.5 py-1.5 rounded-full transition-all cursor-pointer text-left leading-tight shadow-2xs"
                       >
-                        {prompt}
+                        {topic}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                {/* Form Input Fields */}
-                <form onSubmit={handleSubmit} className="space-y-3 pt-2 border-t border-[#E7E2DA]">
+                {/* Input Form */}
+                <form onSubmit={handleSubmit} className="bg-white p-3.5 rounded-2xl shadow-xs border border-[#E7E2DA]/50 space-y-2.5">
                   {error && (
-                    <div className="p-2 text-[11px] bg-[#FDF2F2] border border-[#F8B4B4] text-[#9B1C1C] rounded-[4px]">
+                    <div className="p-2 text-[11px] bg-red-50 text-red-700 rounded-lg border border-red-200">
                       {error}
                     </div>
                   )}
 
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#53433B] mb-1">
-                        Your Name *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="e.g. Rahul Varma"
-                        className="w-full px-2.5 py-1.5 text-xs bg-[#FBF9F5] border border-[#E7E2DA] rounded-[4px] focus:outline-none focus:border-[#25D366]"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#53433B] mb-1">
-                        Your WhatsApp / Phone *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={contact}
-                        onChange={(e) => setContact(e.target.value)}
-                        placeholder="+91 98765 43210"
-                        className="w-full px-2.5 py-1.5 text-xs bg-[#FBF9F5] border border-[#E7E2DA] rounded-[4px] focus:outline-none focus:border-[#25D366]"
-                      />
-                    </div>
+                  <div>
+                    <input
+                      type="text"
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Your name"
+                      className="w-full px-3 py-2 text-xs bg-[#FBF9F5] border border-[#E7E2DA] rounded-lg focus:outline-none focus:border-[#075E54] focus:bg-white text-[#1C1C18] transition-colors"
+                    />
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#53433B] mb-1">
-                      Inquiry Type
-                    </label>
-                    <select
-                      value={category}
-                      onChange={(e) => setCategory(e.target.value)}
-                      className="w-full px-2.5 py-1.5 text-xs bg-[#FBF9F5] border border-[#E7E2DA] rounded-[4px] focus:outline-none focus:border-[#25D366]"
-                    >
-                      <option value="Stock & Customization">Stock & Custom Dimensions</option>
-                      <option value="Showroom Consultation">Showroom Visit (Vijayawada / Vizag / Tirupati)</option>
-                      <option value="Architectural Freight & Delivery">Delivery & Freight Inquiry</option>
-                      <option value="Trade & Interior Designer Pricing">Trade / Bulk Architect Pricing</option>
-                    </select>
+                    <input
+                      type="text"
+                      required
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="WhatsApp phone number"
+                      className="w-full px-3 py-2 text-xs bg-[#FBF9F5] border border-[#E7E2DA] rounded-lg focus:outline-none focus:border-[#075E54] focus:bg-white text-[#1C1C18] transition-colors"
+                    />
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#53433B] mb-1">
-                      Message / Piece of Interest *
-                    </label>
                     <textarea
-                      rows={3}
+                      rows={2}
                       required
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Ask about joinery, wood finishes, or pricing..."
-                      className="w-full px-2.5 py-1.5 text-xs bg-[#FBF9F5] border border-[#E7E2DA] rounded-[4px] focus:outline-none focus:border-[#25D366]"
+                      placeholder="Type your message..."
+                      className="w-full px-3 py-2 text-xs bg-[#FBF9F5] border border-[#E7E2DA] rounded-lg focus:outline-none focus:border-[#075E54] focus:bg-white text-[#1C1C18] resize-none transition-colors"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-2.5 px-4 bg-[#25D366] hover:bg-[#20BA5A] text-[#FFFFFF] font-semibold text-xs uppercase tracking-wider rounded-[4px] shadow-sm transition-all flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50"
+                    className="w-full py-2.5 px-4 bg-[#25D366] hover:bg-[#20BA5A] text-white font-semibold text-xs rounded-lg shadow-sm transition-all flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50"
                   >
                     <Send className="w-3.5 h-3.5" />
-                    <span>{isSubmitting ? 'Relaying to WhatsApp...' : 'Send to Showroom Desk'}</span>
+                    <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
                   </button>
+
+                  <div className="flex items-center justify-center space-x-1 text-[10px] text-[#86736A] pt-1">
+                    <Shield className="w-3 h-3 text-[#25D366]" />
+                    <span>Private & confidential inquiry</span>
+                  </div>
                 </form>
               </>
             )}
@@ -304,4 +242,3 @@ export const WhatsAppChatWidget: React.FC<WhatsAppChatWidgetProps> = ({
     </>
   );
 };
-
