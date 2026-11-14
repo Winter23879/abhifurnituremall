@@ -45,8 +45,25 @@ const DEFAULT_CART_ITEMS: CartItem[] = [
   },
 ];
 
+// Helper to detect if accessing via admin subdomain (e.g. admin.abhifurnituremall.in), /admin route, or ?admin=true
+const checkIsAdminContext = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  const host = window.location.hostname.toLowerCase();
+  const path = window.location.pathname.toLowerCase();
+  const search = window.location.search.toLowerCase();
+  return (
+    host.startsWith('admin.') ||
+    path.startsWith('/admin') ||
+    search.includes('mode=admin') ||
+    search.includes('admin=true')
+  );
+};
+
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'home' | 'catalog' | 'spaces' | 'planner' | 'craft' | 'admin'>('home');
+  const isAdminDomain = typeof window !== 'undefined' && checkIsAdminContext();
+  const [activeTab, setActiveTab] = useState<'home' | 'catalog' | 'spaces' | 'planner' | 'craft' | 'admin'>(() =>
+    checkIsAdminContext() ? 'admin' : 'home'
+  );
   const [selectedDetailProduct, setSelectedDetailProduct] = useState<Product | null>(null);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -57,7 +74,9 @@ export default function App() {
 
   // Admin Studio State
   const [adminSession, setAdminSessionState] = useState<AdminAuthSession | null>(() => getAdminSession());
-  const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
+  const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(() =>
+    checkIsAdminContext() && !getAdminSession()
+  );
 
   // Live Catalog State (Backed by LocalStorage, defaulting to handcrafted collection)
   const [products, setProducts] = useState<Product[]>(() =>
