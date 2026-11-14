@@ -206,20 +206,20 @@ export const SpatialStudio: React.FC<SpatialStudioProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3">
             <button
               onClick={() => setPlacedItems([])}
-              className="text-xs uppercase tracking-wider text-[#53433B] hover:text-[#BA1A1A] py-2 px-3 border border-[#E7E2DA] rounded-[4px] hover:border-[#BA1A1A]/40 transition-colors bg-[#FFFFFF]"
+              className="text-xs uppercase tracking-wider text-[#53433B] hover:text-[#BA1A1A] py-2.5 px-3 border border-[#E7E2DA] rounded-[4px] hover:border-[#BA1A1A]/40 transition-colors bg-[#FFFFFF] cursor-pointer"
             >
               Reset Canvas
             </button>
             <button
               onClick={handleAddBundle}
               disabled={placedItems.length === 0}
-              className="py-3 px-6 bg-[#9E582C] text-[#FBF9F5] text-xs font-semibold uppercase tracking-[0.06em] rounded-[4px] hover:bg-[#2A2825] disabled:opacity-50 transition-colors shadow-sm flex items-center space-x-2"
+              className="py-2.5 sm:py-3 px-4 sm:px-6 bg-[#9E582C] text-[#FBF9F5] text-xs font-semibold uppercase tracking-[0.06em] rounded-[4px] hover:bg-[#2A2825] disabled:opacity-50 transition-colors shadow-sm flex items-center space-x-2 cursor-pointer"
             >
-              <ShoppingBag className="w-4 h-4" />
-              <span>Add Sanctuary Bundle ({formatPrice(totalBundlePrice)})</span>
+              <ShoppingBag className="w-4 h-4 shrink-0" />
+              <span className="truncate">Add Bundle ({formatPrice(totalBundlePrice)})</span>
             </button>
           </div>
         </div>

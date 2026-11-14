@@ -414,8 +414,8 @@ export const StorePage: React.FC<StorePageProps> = ({
           </div>
 
           {/* Top Controls: Search, Sort & Mobile Filter Trigger */}
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="relative flex-1 sm:w-64 sm:flex-none">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full lg:w-auto">
+            <div className="relative w-full sm:w-60 lg:w-64">
               <input
                 type="text"
                 value={searchQuery}
@@ -426,26 +426,28 @@ export const StorePage: React.FC<StorePageProps> = ({
               <Search className="w-4 h-4 text-[#86736A] absolute left-3 top-3 pointer-events-none" />
             </div>
 
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-              aria-label="Sort collection"
-              className="py-2.5 px-3 text-xs bg-[#FFFFFF] border border-[#E7E2DA] rounded-[4px] text-[#2A2825] focus:outline-none focus:border-[#9E582C]"
-            >
-              <option value="featured">Sort: Curated Signature</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-              <option value="name">Alphabetical (A–Z)</option>
-            </select>
+            <div className="flex items-center gap-2 justify-between sm:justify-start">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                aria-label="Sort collection"
+                className="flex-1 sm:flex-none py-2.5 px-3 text-xs bg-[#FFFFFF] border border-[#E7E2DA] rounded-[4px] text-[#2A2825] focus:outline-none focus:border-[#9E582C]"
+              >
+                <option value="featured">Sort: Curated Signature</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="name">Alphabetical (A–Z)</option>
+              </select>
 
-            <button
-              type="button"
-              onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
-              className="lg:hidden inline-flex items-center space-x-2 py-2.5 px-3.5 text-xs font-semibold uppercase tracking-wider bg-[#2A2825] text-[#FBF9F5] rounded-[4px] cursor-pointer"
-            >
-              <SlidersHorizontal className="w-3.5 h-3.5" />
-              <span>Filters</span>
-            </button>
+              <button
+                type="button"
+                onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
+                className="lg:hidden inline-flex items-center space-x-1.5 py-2.5 px-3 text-xs font-semibold uppercase tracking-wider bg-[#2A2825] text-[#FBF9F5] rounded-[4px] cursor-pointer shrink-0"
+              >
+                <SlidersHorizontal className="w-3.5 h-3.5" />
+                <span>Filters</span>
+              </button>
+            </div>
           </div>
         </div>
 

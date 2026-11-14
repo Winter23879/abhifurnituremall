@@ -118,7 +118,7 @@ export const SampleKitModal: React.FC<SampleKitModalProps> = ({
               <label className="block text-xs font-semibold uppercase tracking-wider text-[#2A2825]">
                 Select Samples for Your Box:
               </label>
-              <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                 {[
                   'Natural White Oak',
                   'Smoked Nordic Oak',

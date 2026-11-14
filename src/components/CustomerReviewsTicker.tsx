@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Star, CheckCircle2, ChevronLeft, ChevronRight, Quote, Sparkles } from 'lucide-react';
+import { Star, CheckCircle2, ChevronLeft, ChevronRight, Quote, Sparkles, ShieldCheck } from 'lucide-react';
 
 interface ReviewItem {
   id: string;
@@ -110,20 +110,51 @@ interface CustomerReviewsTickerProps {
 export const CustomerReviewsTicker: React.FC<CustomerReviewsTickerProps> = ({
   onOpenSampleKit,
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(3);
   const [isPaused, setIsPaused] = useState(false);
+  const touchStartXRef = useRef<number | null>(null);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
 
   const totalReviews = REVIEWS.length;
 
+  // Responsive device listener for viewport-aware slide widths
+  useEffect(() => {
+    const updateVisibleCount = () => {
+      if (typeof window === 'undefined') return;
+      const width = window.innerWidth;
+      if (width < 640) {
+        setVisibleCount(1); // Mobile: 1 full card
+      } else if (width < 1024) {
+        setVisibleCount(2); // Tablet: 2 cards
+      } else {
+        setVisibleCount(3); // Desktop & Ultra-wide: 3 cards
+      }
+    };
+
+    updateVisibleCount();
+    window.addEventListener('resize', updateVisibleCount, { passive: true });
+    return () => window.removeEventListener('resize', updateVisibleCount);
+  }, []);
+
+  const maxIndex = Math.max(0, totalReviews - visibleCount);
+
+  // Keep currentIndex within bounds when switching screen orientation
+  useEffect(() => {
+    if (currentIndex > maxIndex) {
+      setCurrentIndex(maxIndex);
+    }
+  }, [visibleCount, maxIndex, currentIndex]);
+
   const nextSlide = () => {
-    setActiveIndex((prev) => (prev + 1) % totalReviews);
+    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
   };
 
   const prevSlide = () => {
-    setActiveIndex((prev) => (prev - 1 + totalReviews) % totalReviews);
+    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
   };
 
+  // Fluid 5-second automatic progression, pausing on hover or touch
   useEffect(() => {
     if (!isPaused) {
       autoPlayRef.current = setInterval(() => {
@@ -133,51 +164,75 @@ export const CustomerReviewsTicker: React.FC<CustomerReviewsTickerProps> = ({
     return () => {
       if (autoPlayRef.current) clearInterval(autoPlayRef.current);
     };
-  }, [isPaused, activeIndex]);
+  }, [isPaused, currentIndex, maxIndex]);
+
+  // Touch Swipe Handlers for mobile smartphones & tablets
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0].clientX;
+    setIsPaused(true);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartXRef.current - touchEndX;
+
+    // Minimum swipe threshold of 45px
+    if (Math.abs(diff) > 45) {
+      if (diff > 0) {
+        nextSlide();
+      } else {
+        prevSlide();
+      }
+    }
+    touchStartXRef.current = null;
+    setIsPaused(false);
+  };
 
   return (
     <section
-      className="bg-[#F5F1EB] border-t border-[#E7E2DA] py-14 lg:py-20 relative overflow-hidden"
+      className="bg-[#F5F1EB] border-t border-[#E7E2DA] py-12 sm:py-16 lg:py-20 relative overflow-hidden select-none"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={() => setIsPaused(true)}
-      onTouchEnd={() => setIsPaused(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      aria-label="Customer Reviews"
     >
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 space-y-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 space-y-8 sm:space-y-10">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#E7E2DA] pb-6 gap-4">
+        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#E7E2DA] pb-5 sm:pb-6 gap-4">
           <div>
             <div className="inline-flex items-center space-x-2 text-[11px] font-semibold text-[#804116] uppercase tracking-[0.1em] mb-1.5">
               <Sparkles className="w-3.5 h-3.5 text-[#9E582C]" />
               <span>Verified Homeowner Experiences · 480+ Homes Furnished</span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#1C1C18] tracking-tight">
+            <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-[#1C1C18] tracking-tight">
               Loved by Homeowners Across South India
             </h2>
             <p className="text-xs sm:text-sm text-[#53433B] mt-1 max-w-2xl">
-              Real testimonials from families, architects, and interior designers who live with our solid timber pieces daily.
+              Authentic testimonials from families, architects, and interior designers who live with our solid timber pieces daily.
             </p>
           </div>
 
-          {/* Rating Summary & Navigation Controls */}
-          <div className="flex items-center space-x-4 shrink-0">
-            <div className="hidden sm:flex items-center space-x-2 bg-[#FFFFFF] px-3.5 py-2 rounded-[4px] border border-[#E7E2DA] shadow-xs">
+          {/* Aggregate Rating & Manual Navigation Controls */}
+          <div className="flex items-center justify-between sm:justify-end space-x-3 sm:space-x-4 shrink-0">
+            <div className="flex items-center space-x-2 bg-[#FFFFFF] px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-[4px] border border-[#E7E2DA] shadow-xs">
               <div className="flex text-[#D4A373]">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                  <Star key={i} className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" />
                 ))}
               </div>
               <span className="font-bold text-xs text-[#1C1C18]">4.95 / 5.0</span>
-              <span className="text-[11px] text-[#86736A]">(480+ Deliveries)</span>
+              <span className="text-[10px] sm:text-[11px] text-[#86736A] hidden xs:inline">(480+ Homes)</span>
             </div>
 
-            {/* Manual Arrows */}
+            {/* Hardware-Accelerated Smooth Arrows */}
             <div className="flex items-center space-x-1.5">
               <button
                 type="button"
                 onClick={prevSlide}
                 aria-label="Previous review"
-                className="w-9 h-9 rounded-[4px] bg-[#FFFFFF] hover:bg-[#2A2825] text-[#1C1C18] hover:text-[#FFFFFF] border border-[#E7E2DA] transition-colors flex items-center justify-center cursor-pointer shadow-xs"
+                className="w-9 h-9 rounded-[4px] bg-[#FFFFFF] hover:bg-[#2A2825] active:scale-95 text-[#1C1C18] hover:text-[#FFFFFF] border border-[#E7E2DA] transition-all flex items-center justify-center cursor-pointer shadow-xs focus:outline-none focus:ring-1 focus:ring-[#9E582C]"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -185,7 +240,7 @@ export const CustomerReviewsTicker: React.FC<CustomerReviewsTickerProps> = ({
                 type="button"
                 onClick={nextSlide}
                 aria-label="Next review"
-                className="w-9 h-9 rounded-[4px] bg-[#FFFFFF] hover:bg-[#2A2825] text-[#1C1C18] hover:text-[#FFFFFF] border border-[#E7E2DA] transition-colors flex items-center justify-center cursor-pointer shadow-xs"
+                className="w-9 h-9 rounded-[4px] bg-[#FFFFFF] hover:bg-[#2A2825] active:scale-95 text-[#1C1C18] hover:text-[#FFFFFF] border border-[#E7E2DA] transition-all flex items-center justify-center cursor-pointer shadow-xs focus:outline-none focus:ring-1 focus:ring-[#9E582C]"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -193,25 +248,28 @@ export const CustomerReviewsTicker: React.FC<CustomerReviewsTickerProps> = ({
           </div>
         </div>
 
-        {/* Dynamic Reviews Carousel Track */}
-        <div className="relative">
-          {/* Visible 3-Card Carousel on Desktop / 1-Card on Mobile */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[0, 1, 2].map((offset) => {
-              const review = REVIEWS[(activeIndex + offset) % totalReviews];
-              return (
-                <div
-                  key={review.id}
-                  className="bg-[#FFFFFF] border border-[#E7E2DA] rounded-[4px] p-6 sm:p-7 flex flex-col justify-between shadow-xs hover:shadow-sm transition-all duration-300 relative group"
-                >
-                  <Quote className="absolute top-6 right-6 w-8 h-8 text-[#E7E2DA]/80 pointer-events-none group-hover:text-[#D4A373]/40 transition-colors" />
+        {/* Fluid Hardware-Accelerated Sliding Track */}
+        <div className="relative overflow-hidden w-full">
+          <div
+            className="flex gap-4 sm:gap-6 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform"
+            style={{
+              transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
+            }}
+          >
+            {REVIEWS.map((review) => (
+              <div
+                key={review.id}
+                className="shrink-0 w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex flex-col"
+              >
+                <div className="bg-[#FFFFFF] border border-[#E7E2DA] rounded-[4px] p-5 sm:p-6 lg:p-7 flex-1 flex flex-col justify-between shadow-xs hover:shadow-sm hover:border-[#D4A373] transition-all duration-300 relative group min-h-[300px] sm:min-h-[320px]">
+                  <Quote className="absolute top-5 right-5 sm:top-6 sm:right-6 w-7 h-7 sm:w-8 sm:h-8 text-[#E7E2DA]/80 pointer-events-none group-hover:text-[#D4A373]/40 transition-colors" />
 
-                  <div className="space-y-3.5">
-                    {/* Stars & Badge */}
+                  <div className="space-y-3">
+                    {/* Stars & Date */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center text-[#D4A373] space-x-0.5">
                         {[...Array(review.rating)].map((_, i) => (
-                          <Star key={i} className="w-4 h-4 fill-current" />
+                          <Star key={i} className="w-3.5 h-3.5 fill-current" />
                         ))}
                       </div>
                       <span className="text-[10px] font-mono text-[#86736A] bg-[#FBF9F5] px-2 py-0.5 rounded border border-[#E7E2DA]">
@@ -231,7 +289,7 @@ export const CustomerReviewsTicker: React.FC<CustomerReviewsTickerProps> = ({
                   </div>
 
                   {/* Reviewer Details & Piece Tag */}
-                  <div className="pt-5 mt-5 border-t border-[#F5F1EB] space-y-2">
+                  <div className="pt-4 mt-4 sm:pt-5 sm:mt-5 border-t border-[#F5F1EB] space-y-2">
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="text-xs font-semibold text-[#1C1C18] flex items-center space-x-1.5">
@@ -244,38 +302,38 @@ export const CustomerReviewsTicker: React.FC<CustomerReviewsTickerProps> = ({
                       </div>
                     </div>
 
-                    {/* Piece Purchased Pill */}
+                    {/* Piece Purchased Tag */}
                     <div className="text-[10px] text-[#804116] bg-[#F5F1EB] px-2.5 py-1 rounded-[3px] border border-[#E7E2DA] truncate font-medium">
                       Piece: {review.piecePurchased}
                     </div>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Carousel Progress Indicators */}
-        <div className="flex items-center justify-center space-x-2 pt-2">
-          {REVIEWS.map((_, idx) => (
+        {/* Carousel Pagination Progress Indicators */}
+        <div className="flex items-center justify-center space-x-1.5 sm:space-x-2 pt-1">
+          {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
             <button
               key={idx}
               type="button"
-              onClick={() => setActiveIndex(idx)}
-              aria-label={`Go to slide ${idx + 1}`}
-              className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                activeIndex === idx ? 'w-8 bg-[#9E582C]' : 'w-2 bg-[#D9C2B7] hover:bg-[#86736A]'
+              onClick={() => setCurrentIndex(idx)}
+              aria-label={`Go to slide group ${idx + 1}`}
+              className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                currentIndex === idx ? 'w-8 bg-[#9E582C]' : 'w-2 bg-[#D9C2B7] hover:bg-[#86736A]'
               }`}
             />
           ))}
         </div>
 
-        {/* Reassurance Banner under reviews */}
-        <div className="p-4 bg-[#FFFFFF] border border-[#E7E2DA] rounded-[4px] flex flex-col sm:flex-row items-center justify-between text-xs text-[#53433B] gap-4 shadow-xs">
-          <div className="flex items-center space-x-2 text-center sm:text-left">
-            <span className="w-2 h-2 rounded-full bg-[#9E582C] shrink-0 hidden sm:inline" />
-            <span>
-              Every piece is delivered in protective timber packaging with <strong>Free White-Glove In-Home Assembly</strong> across Andhra Pradesh & Telangana.
+        {/* Responsive Reassurance Banner */}
+        <div className="p-4 sm:p-5 bg-[#FFFFFF] border border-[#E7E2DA] rounded-[4px] flex flex-col sm:flex-row items-center justify-between text-xs text-[#53433B] gap-3 sm:gap-4 shadow-xs">
+          <div className="flex items-center space-x-2.5 text-center sm:text-left">
+            <ShieldCheck className="w-4 h-4 text-[#9E582C] shrink-0 hidden sm:inline" />
+            <span className="leading-relaxed">
+              Every order arrives in reinforced timber crates with <strong>Free White-Glove In-Home Assembly</strong> across Andhra Pradesh & Telangana.
             </span>
           </div>
 
@@ -283,7 +341,7 @@ export const CustomerReviewsTicker: React.FC<CustomerReviewsTickerProps> = ({
             <button
               type="button"
               onClick={onOpenSampleKit}
-              className="text-[#804116] font-semibold hover:text-[#2A2825] uppercase tracking-wider text-[11px] shrink-0 underline underline-offset-4 decoration-[#D4A373] cursor-pointer"
+              className="text-[#804116] font-semibold hover:text-[#2A2825] uppercase tracking-wider text-[11px] shrink-0 underline underline-offset-4 decoration-[#D4A373] transition-colors cursor-pointer"
             >
               Order Free Material Swatches →
             </button>

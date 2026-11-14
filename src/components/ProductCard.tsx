@@ -90,11 +90,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           )}
         </div>
 
-        {/* Hover Quick Action Layer */}
+        {/* Hover & Focus Quick Action Layer */}
         <div
-          className={`absolute inset-x-3 bottom-3 z-20 transition-all duration-300 flex items-center gap-2 ${
+          className={`absolute inset-x-3 bottom-3 z-20 transition-all duration-300 flex items-center gap-2 group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto ${
             isHovered
-              ? 'opacity-100 translate-y-0'
+              ? 'opacity-100 translate-y-0 pointer-events-auto'
               : 'opacity-0 translate-y-2 pointer-events-none'
           }`}
         >

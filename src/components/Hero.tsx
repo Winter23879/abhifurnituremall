@@ -126,6 +126,7 @@ export const Hero: React.FC<HeroProps> = ({
 }) => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
   useEffect(() => {
     if (isPaused) return;
@@ -143,6 +144,26 @@ export const Hero: React.FC<HeroProps> = ({
     setActiveSlide((prev) => (prev + 1) % SLIDES.length);
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+    setIsPaused(true);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+    setTouchStartX(null);
+    setIsPaused(false);
+  };
+
   const handleSlideAction = (category: string) => {
     onSelectCategory?.(category);
     onExploreCollection();
@@ -150,13 +171,16 @@ export const Hero: React.FC<HeroProps> = ({
 
   return (
     <section
-      className="bg-[#FBF9F5] border-b border-[#E7E2DA] min-h-[calc(100dvh-113px)] md:h-[calc(100dvh-113px)] md:min-h-[600px] flex flex-col"
+      className="bg-[#FBF9F5] border-b border-[#E7E2DA] min-h-[calc(100dvh-113px)] md:h-[calc(100dvh-113px)] md:min-h-[600px] flex flex-col select-none"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      aria-label="Signature Furniture Carousel"
     >
       {/* Full-Width Architectural Carousel */}
-      <div className="flex-1 min-h-0 flex flex-col max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-12 py-4 sm:py-5">
-        <div className="relative flex-1 min-h-[420px] md:min-h-0 overflow-hidden rounded-[4px] border border-[#E7E2DA] bg-[#2A2825] shadow-[0_12px_36px_-8px_rgba(42,40,37,0.12)]">
+      <div className="flex-1 min-h-0 flex flex-col max-w-[1440px] w-full mx-auto px-3 sm:px-6 lg:px-12 py-3 sm:py-5">
+        <div className="relative flex-1 min-h-[380px] sm:min-h-[420px] md:min-h-0 overflow-hidden rounded-[4px] border border-[#E7E2DA] bg-[#2A2825] shadow-[0_12px_36px_-8px_rgba(42,40,37,0.12)]">
           {/* Slides Track (GPU-composited translate3d) */}
           <div
             className="flex h-full will-change-transform transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
@@ -165,7 +189,7 @@ export const Hero: React.FC<HeroProps> = ({
             {SLIDES.map((slide) => (
               <div
                 key={slide.id}
-                className="relative w-full h-full min-h-[420px] md:min-h-0 shrink-0"
+                className="relative w-full h-full min-h-[380px] sm:min-h-[420px] md:min-h-0 shrink-0"
               >
                 <img
                   src={slide.image}
@@ -179,26 +203,26 @@ export const Hero: React.FC<HeroProps> = ({
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1C1C18]/40 via-transparent to-transparent" />
 
                 {/* Left-Aligned Editorial Callout */}
-                <div className="absolute inset-y-0 left-0 flex items-center px-12 sm:px-16 lg:px-24 max-w-2xl">
-                  <div className="text-center sm:text-left">
-                    <p className="font-sans text-lg sm:text-2xl lg:text-[28px] font-light tracking-[0.04em] text-[#FBF9F5]/95">
+                <div className="absolute inset-y-0 left-0 flex items-center px-6 sm:px-12 lg:px-20 max-w-2xl">
+                  <div className="text-left">
+                    <p className="font-sans text-base sm:text-2xl lg:text-[28px] font-light tracking-[0.04em] text-[#FBF9F5]/95">
                       {slide.eyebrow}
                     </p>
 
-                    <h1 className="font-serif text-5xl sm:text-7xl lg:text-[84px] font-normal tracking-[0.04em] leading-[0.95] text-[#FBF9F5] mt-1">
+                    <h1 className="font-serif text-4xl sm:text-6xl lg:text-[84px] font-normal tracking-[0.04em] leading-[0.95] text-[#FBF9F5] mt-1">
                       {slide.headline}
                     </h1>
 
-                    <div className="w-12 h-[1px] bg-[#D4A373] my-4 mx-auto sm:mx-0" />
+                    <div className="w-10 sm:w-12 h-[1px] bg-[#D4A373] my-3 sm:my-4" />
 
-                    <p className="font-sans text-base sm:text-xl font-medium text-[#FBF9F5] tracking-wide">
+                    <p className="font-sans text-sm sm:text-xl font-medium text-[#FBF9F5] tracking-wide">
                       {slide.subtitle}
                     </p>
 
                     <button
                       type="button"
                       onClick={() => handleSlideAction(slide.category)}
-                      className="mt-3.5 inline-flex items-center px-5 py-2.5 rounded-[4px] bg-[#9E582C] hover:bg-[#804116] text-[#FBF9F5] text-sm sm:text-base font-semibold tracking-wide shadow-md transition-colors duration-200 cursor-pointer"
+                      className="mt-3 sm:mt-3.5 inline-flex items-center px-4 sm:px-5 py-2 sm:py-2.5 rounded-[4px] bg-[#9E582C] hover:bg-[#804116] text-[#FBF9F5] text-xs sm:text-sm font-semibold tracking-wide shadow-md transition-colors duration-200 cursor-pointer"
                     >
                       {slide.priceTag}
                     </button>
@@ -206,7 +230,7 @@ export const Hero: React.FC<HeroProps> = ({
                 </div>
 
                 {/* Bottom-Right Spec / T&C Note */}
-                <span className="absolute bottom-3.5 right-5 text-[11px] font-medium text-[#FBF9F5]/85 tracking-wide">
+                <span className="absolute bottom-3.5 right-4 sm:right-5 text-[10px] sm:text-[11px] font-medium text-[#FBF9F5]/85 tracking-wide">
                   {slide.footnote}
                 </span>
               </div>
@@ -256,15 +280,15 @@ export const Hero: React.FC<HeroProps> = ({
 
       {/* Bottom Promotional & Countdown Strip matching Japandi Palette */}
       <div className="shrink-0 bg-[#F5F1EB] border-t border-[#E7E2DA]">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 py-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#E7E2DA] items-center gap-4 md:gap-0">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 py-3 sm:py-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#E7E2DA] items-center gap-3 md:gap-0">
             {/* Column 1: Live Sale Countdown */}
-            <div className="flex items-center justify-center md:justify-start md:pr-6 gap-4">
+            <div className="flex items-center justify-center md:justify-start md:pr-6 gap-3 sm:gap-4 pb-2 md:pb-0">
               <div className="leading-tight">
-                <span className="block text-sm font-bold tracking-[0.08em] uppercase text-[#9E582C]">
+                <span className="block text-xs sm:text-sm font-bold tracking-[0.08em] uppercase text-[#9E582C]">
                   SALE
                 </span>
-                <span className="block text-xs font-medium text-[#53433B]">
+                <span className="block text-[11px] sm:text-xs font-medium text-[#53433B]">
                   Ends In
                 </span>
               </div>
@@ -273,26 +297,26 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
 
             {/* Column 2: No Cost EMI */}
-            <div className="flex items-center justify-center pt-3 md:pt-0 md:px-6 gap-3 flex-wrap sm:flex-nowrap">
-              <div className="flex items-center space-x-2.5">
-                <div className="w-8 h-8 rounded-full border border-[#9E582C]/40 bg-[#FBF9F5] flex items-center justify-center shrink-0">
-                  <Percent className="w-4 h-4 text-[#9E582C]" />
+            <div className="flex items-center justify-center py-2 md:py-0 md:px-6 gap-2.5 sm:gap-3 flex-wrap">
+              <div className="flex items-center space-x-2">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-[#9E582C]/40 bg-[#FBF9F5] flex items-center justify-center shrink-0">
+                  <Percent className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#9E582C]" />
                 </div>
                 <div className="leading-tight">
-                  <span className="block text-xs font-bold tracking-[0.06em] uppercase text-[#1C1C18]">
+                  <span className="block text-[11px] sm:text-xs font-bold tracking-[0.06em] uppercase text-[#1C1C18]">
                     NO COST EMI
                   </span>
-                  <span className="block text-[11px] text-[#53433B]">
+                  <span className="block text-[10px] sm:text-[11px] text-[#53433B]">
                     on leading banks
                   </span>
                 </div>
               </div>
 
-              <div className="flex items-center flex-wrap gap-1.5">
+              <div className="flex items-center flex-wrap justify-center gap-1 sm:gap-1.5">
                 {['ICICI', 'HDFC', 'AXIS', 'KOTAK'].map((bank) => (
                   <span
                     key={bank}
-                    className="px-2 py-0.5 text-[10px] font-bold tracking-[0.05em] rounded-[3px] bg-[#FFFFFF] border border-[#E7E2DA] text-[#2A2825]"
+                    className="px-1.5 sm:px-2 py-0.5 text-[9.5px] sm:text-[10px] font-bold tracking-[0.05em] rounded-[3px] bg-[#FFFFFF] border border-[#E7E2DA] text-[#2A2825]"
                   >
                     {bank}
                   </span>
@@ -301,15 +325,15 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
 
             {/* Column 3: Buy More, Save More */}
-            <div className="flex items-center justify-center md:justify-end pt-3 md:pt-0 md:pl-6 gap-3">
-              <div className="w-8 h-8 rounded-full border border-[#9E582C]/40 bg-[#FBF9F5] flex items-center justify-center shrink-0">
-                <BadgePercent className="w-4 h-4 text-[#9E582C]" />
+            <div className="flex items-center justify-center md:justify-end pt-2 md:pt-0 md:pl-6 gap-2.5 sm:gap-3">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-[#9E582C]/40 bg-[#FBF9F5] flex items-center justify-center shrink-0">
+                <BadgePercent className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#9E582C]" />
               </div>
-              <div className="leading-tight">
-                <span className="block text-xs font-bold tracking-[0.04em] text-[#9E582C]">
+              <div className="leading-tight text-center sm:text-left">
+                <span className="block text-[11px] sm:text-xs font-bold tracking-[0.04em] text-[#9E582C]">
                   Buy More, Save More
                 </span>
-                <span className="block text-[11px] text-[#53433B]">
+                <span className="block text-[10px] sm:text-[11px] text-[#53433B]">
                   Get Extra Up to 15% Instant Discount*
                 </span>
               </div>

@@ -192,7 +192,7 @@ export const HomeEditorialSpotlight: React.FC<HomeEditorialSpotlightProps> = ({
                       onSelectCategory(card.category);
                     }
                   }}
-                  className="relative shrink-0 w-[84%] sm:w-[48%] lg:w-[39%] h-[220px] sm:h-[250px] rounded-[4px] overflow-hidden border border-[#E7E2DA] hover:border-[#D4A373] bg-[#2A2825] shadow-sm group cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#9E582C]"
+                  className="relative shrink-0 w-[88%] sm:w-[48%] lg:w-[39%] h-[210px] sm:h-[250px] rounded-[4px] overflow-hidden border border-[#E7E2DA] hover:border-[#D4A373] bg-[#2A2825] shadow-sm group cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#9E582C]"
                 >
                   <img
                     src={card.image}
@@ -205,9 +205,9 @@ export const HomeEditorialSpotlight: React.FC<HomeEditorialSpotlightProps> = ({
                   <div className="absolute inset-0 bg-gradient-to-r from-[#1C1C18]/85 via-[#1C1C18]/45 to-transparent" />
 
                   {/* Card Copy */}
-                  <div className="absolute inset-y-0 left-0 p-6 sm:p-7 flex flex-col justify-between max-w-[65%]">
+                  <div className="absolute inset-y-0 left-0 p-4 sm:p-7 flex flex-col justify-between max-w-[80%] sm:max-w-[65%]">
                     <div>
-                      <h3 className="font-sans text-lg sm:text-xl font-medium tracking-[0.04em] text-[#FBF9F5] uppercase">
+                      <h3 className="font-sans text-base sm:text-xl font-medium tracking-[0.04em] text-[#FBF9F5] uppercase">
                         {card.title}
                       </h3>
                       <p className="text-xs text-[#F5F1EB]/90 mt-1 leading-relaxed">
@@ -215,7 +215,7 @@ export const HomeEditorialSpotlight: React.FC<HomeEditorialSpotlightProps> = ({
                       </p>
                     </div>
 
-                    <div className="space-y-2.5">
+                    <div className="space-y-2">
                       <span className="block text-sm sm:text-base font-medium text-[#FBF9F5]">
                         {card.offer}
                       </span>
@@ -225,7 +225,7 @@ export const HomeEditorialSpotlight: React.FC<HomeEditorialSpotlightProps> = ({
                           e.stopPropagation();
                           onSelectCategory(card.category);
                         }}
-                        className="px-4 py-1.5 rounded-full bg-[#FBF9F5] hover:bg-[#9E582C] text-[#1C1C18] hover:text-[#FBF9F5] text-xs font-semibold transition-colors shadow-sm cursor-pointer"
+                        className="px-3.5 sm:px-4 py-1.5 rounded-full bg-[#FBF9F5] hover:bg-[#9E582C] text-[#1C1C18] hover:text-[#FBF9F5] text-xs font-semibold transition-colors shadow-sm cursor-pointer"
                       >
                         Buy Now
                       </button>

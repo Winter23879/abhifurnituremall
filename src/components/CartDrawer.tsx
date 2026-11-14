@@ -520,7 +520,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
             {/* Payment & Trust Signals */}
             <div className="pt-2 border-t border-[#F5F1EB] space-y-2">
-              <div className="flex items-center justify-center space-x-3 text-[10px] text-[#6A635E] font-medium">
+              <div className="flex flex-wrap items-center justify-center gap-1.5 text-[10px] text-[#6A635E] font-medium">
                 <span className="px-2 py-0.5 bg-[#F5F1EB] rounded border border-[#E7E2DA]">UPI / GPay</span>
                 <span className="px-2 py-0.5 bg-[#F5F1EB] rounded border border-[#E7E2DA]">PhonePe</span>
                 <span className="px-2 py-0.5 bg-[#F5F1EB] rounded border border-[#E7E2DA]">RuPay</span>

@@ -87,7 +87,7 @@ export const BrandValues: React.FC<BrandValuesProps> = ({ onExploreCraft }) => {
                 <span className="font-sans text-sm sm:text-base font-medium tracking-[0.16em] text-[#FBF9F5] uppercase">
                   {item.title}
                 </span>
-                <span className="mt-1.5 text-[11px] text-[#F5F1EB]/80 max-w-[22ch] leading-snug opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                <span className="mt-1.5 text-[11px] text-[#F5F1EB]/90 max-w-[22ch] leading-snug opacity-90 sm:opacity-0 sm:group-hover:opacity-100 sm:translate-y-1 sm:group-hover:translate-y-0 transition-all duration-300">
                   {item.caption}
                 </span>
               </div>
