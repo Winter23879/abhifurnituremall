@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Compass, Grid, Sparkles, BookOpen, Menu, X, ArrowRight, Heart, Calendar, ShieldCheck, Lock } from 'lucide-react';
+import { ShoppingBag, Compass, Grid, Sparkles, BookOpen, Menu, X, ArrowRight, Heart, Calendar } from 'lucide-react';
 
 interface NavbarProps {
   activeTab: 'home' | 'catalog' | 'spaces' | 'planner' | 'craft' | 'admin';
@@ -11,7 +11,7 @@ interface NavbarProps {
   onOpenSampleKit: () => void;
   onOpenVisitModal?: () => void;
   onSelectCategory?: (cat: string) => void;
-  onOpenAdmin: () => void;
+  onOpenAdmin?: () => void;
   isAdminLoggedIn?: boolean;
 }
 
@@ -24,8 +24,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenWishlist,
   onOpenSampleKit,
   onOpenVisitModal,
-  onOpenAdmin,
-  isAdminLoggedIn = false,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -58,21 +56,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           )}
           <span className="text-[#86736A] hidden sm:inline">|</span>
           <span className="text-[#DDD9D4] hidden lg:inline">Vijayawada · Visakhapatnam · Tirupati</span>
-          <span className="text-[#86736A] hidden sm:inline">|</span>
-          <button
-            onClick={onOpenAdmin}
-            className={`inline-flex items-center space-x-1 transition-colors cursor-pointer ${
-              isAdminLoggedIn ? 'text-[#D4A373] font-semibold' : 'text-[#CBC6C1] hover:text-[#FFFFFF]'
-            }`}
-            title="Admin Dashboard & Inventory Control"
-          >
-            {isAdminLoggedIn ? (
-              <ShieldCheck className="w-3 h-3 text-[#D4A373]" />
-            ) : (
-              <Lock className="w-3 h-3 text-[#D4A373]" />
-            )}
-            <span>{isAdminLoggedIn ? 'Admin Studio (Active)' : 'Staff Admin'}</span>
-          </button>
         </div>
       </div>
 
@@ -195,26 +178,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </button>
 
-          {/* Admin Studio Trigger */}
-          <button
-            type="button"
-            onClick={onOpenAdmin}
-            aria-label="Admin Control Studio"
-            className={`p-2.5 rounded-[4px] border transition-all flex items-center space-x-1.5 cursor-pointer ${
-              activeTab === 'admin'
-                ? 'bg-[#9E582C] text-[#FFFFFF] border-[#9E582C]'
-                : isAdminLoggedIn
-                ? 'bg-[#F5F1EB] text-[#804116] border-[#D4A373] hover:bg-[#EAE4DB]'
-                : 'bg-[#FFFFFF] hover:bg-[#F5F1EB] border-[#E7E2DA] text-[#53433B]'
-            }`}
-            title={isAdminLoggedIn ? 'Admin Studio (Active)' : 'Staff Admin Login'}
-          >
-            {isAdminLoggedIn ? <ShieldCheck className="w-4 h-4 text-[#804116]" /> : <Lock className="w-4 h-4 text-[#86736A]" />}
-            <span className="text-xs font-semibold uppercase tracking-wider hidden xl:inline">
-              {isAdminLoggedIn ? 'Admin' : 'Staff'}
-            </span>
-          </button>
-
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -281,20 +244,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               <span>Philosophy & Joinery</span>
-              <ArrowRight className="w-4 h-4 text-[#86736A]" />
-            </button>
-
-            <button
-              onClick={() => {
-                onOpenAdmin();
-                setMobileMenuOpen(false);
-              }}
-              className="text-left py-2 border-b border-[#E7E2DA] flex items-center justify-between text-[#804116] font-semibold cursor-pointer"
-            >
-              <div className="flex items-center space-x-2">
-                {isAdminLoggedIn ? <ShieldCheck className="w-4 h-4 text-[#9E582C]" /> : <Lock className="w-4 h-4 text-[#86736A]" />}
-                <span>{isAdminLoggedIn ? 'Admin Studio Control' : 'Staff Admin Login'}</span>
-              </div>
               <ArrowRight className="w-4 h-4 text-[#86736A]" />
             </button>
 

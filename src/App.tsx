@@ -288,8 +288,6 @@ export default function App() {
         onOpenWishlist={() => setIsWishlistOpen(true)}
         onOpenSampleKit={() => setIsSampleKitOpen(true)}
         onOpenVisitModal={() => setIsVisitModalOpen(true)}
-        onOpenAdmin={handleOpenAdminTrigger}
-        isAdminLoggedIn={Boolean(adminSession?.isAuthenticated)}
       />
 
       {/* Main View Switcher */}
@@ -520,7 +518,6 @@ export default function App() {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         onOpenVisitModal={() => setIsVisitModalOpen(true)}
-        onOpenAdmin={handleOpenAdminTrigger}
       />
     </div>
   );

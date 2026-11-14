@@ -211,19 +211,6 @@ export const Footer: React.FC<FooterProps> = ({
               Sample Box Request
             </button>
             <span>·</span>
-            {onOpenAdmin && (
-              <>
-                <button
-                  type="button"
-                  onClick={onOpenAdmin}
-                  className="hover:text-[#D4A373] text-[#CBC6C1] inline-flex items-center space-x-1 transition-colors cursor-pointer"
-                >
-                  <ShieldCheck className="w-3 h-3 text-[#D4A373]" />
-                  <span>Admin Studio</span>
-                </button>
-                <span>·</span>
-              </>
-            )}
             <span>100% FSC Forest Stewardship</span>
             <span>·</span>
             <span>Zero Polyurethane Finishes</span>
