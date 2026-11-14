@@ -17,6 +17,7 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { CategoryShowcase } from './components/CategoryShowcase';
 import { HomeEditorialSpotlight } from './components/HomeEditorialSpotlight';
+import { CustomerReviewsTicker } from './components/CustomerReviewsTicker';
 import { BrandValues } from './components/BrandValues';
 import { StorePage } from './components/StorePage';
 import { ProductQuickView } from './components/ProductQuickView';
@@ -456,6 +457,11 @@ export default function App() {
 
             <HomeEditorialSpotlight
               onSelectCategory={(cat) => openStoreCategory(cat)}
+            />
+
+            {/* Social Proof: 8 Customer Reviews on Continuous Loop */}
+            <CustomerReviewsTicker
+              onOpenSampleKit={() => setIsSampleKitOpen(true)}
             />
 
             <BrandValues
