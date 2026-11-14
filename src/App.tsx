@@ -5,6 +5,7 @@ import {
   OrderRecord,
   ShowroomVisitRecord,
   SwatchRequestRecord,
+  ChatInquiryRecord,
   AdminAuthSession,
   STORAGE_KEYS,
   loadStoredJson,
@@ -29,6 +30,7 @@ import { SampleKitModal } from './components/SampleKitModal';
 import { ShowroomVisitModal } from './components/ShowroomVisitModal';
 import { AdminDashboard } from './components/AdminDashboard';
 import { AdminLoginModal } from './components/AdminLoginModal';
+import { WhatsAppChatWidget } from './components/WhatsAppChatWidget';
 import { Footer } from './components/Footer';
 
 const DEFAULT_CART_ITEMS: CartItem[] = [
@@ -99,6 +101,9 @@ export default function App() {
   const [showroomVisits, setShowroomVisits] = useState<ShowroomVisitRecord[]>(() =>
     loadStoredJson<ShowroomVisitRecord[]>(STORAGE_KEYS.visits, [])
   );
+  const [chatInquiries, setChatInquiries] = useState<ChatInquiryRecord[]>(() =>
+    loadStoredJson<ChatInquiryRecord[]>(STORAGE_KEYS.chatInquiries, [])
+  );
 
   useEffect(() => {
     saveStoredJson(STORAGE_KEYS.products, products);
@@ -123,6 +128,10 @@ export default function App() {
   useEffect(() => {
     saveStoredJson(STORAGE_KEYS.visits, showroomVisits);
   }, [showroomVisits]);
+
+  useEffect(() => {
+    saveStoredJson(STORAGE_KEYS.chatInquiries, chatInquiries);
+  }, [chatInquiries]);
 
   // Admin Product CRUD Actions
   const handleAdminAddProduct = (newProduct: Product) => {
@@ -324,6 +333,7 @@ export default function App() {
               orders={orders}
               swatches={swatchRequests}
               visits={showroomVisits}
+              chatInquiries={chatInquiries}
             />
           ) : (
             <div className="max-w-md mx-auto py-24 px-4 text-center space-y-5">
@@ -519,6 +529,13 @@ export default function App() {
         }}
         onOpenVisitModal={() => setIsVisitModalOpen(true)}
       />
+
+      {/* Floating Confidential WhatsApp Concierge (Hidden inside Admin Studio) */}
+      {activeTab !== 'admin' && (
+        <WhatsAppChatWidget
+          onInquirySubmitted={(inq) => setChatInquiries((prev) => [inq, ...prev])}
+        />
+      )}
     </div>
   );
 }

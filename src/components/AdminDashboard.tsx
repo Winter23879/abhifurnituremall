@@ -25,9 +25,10 @@ import {
   Clock,
   MapPin,
   ExternalLink,
+  MessageCircle,
 } from 'lucide-react';
 import { Product } from '../data/products';
-import { OrderRecord, SwatchRequestRecord, ShowroomVisitRecord } from '../utils/storage';
+import { OrderRecord, SwatchRequestRecord, ShowroomVisitRecord, ChatInquiryRecord } from '../utils/storage';
 import { formatPrice } from '../utils/pricing';
 import { AdminProductModal } from './AdminProductModal';
 
@@ -43,6 +44,7 @@ interface AdminDashboardProps {
   orders: OrderRecord[];
   swatches: SwatchRequestRecord[];
   visits: ShowroomVisitRecord[];
+  chatInquiries?: ChatInquiryRecord[];
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
@@ -57,8 +59,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   orders,
   swatches,
   visits,
+  chatInquiries = [],
 }) => {
-  const [activeTab, setActiveTab] = useState<'inventory' | 'orders' | 'swatches' | 'visits'>('inventory');
+  const [activeTab, setActiveTab] = useState<'inventory' | 'orders' | 'inquiries' | 'swatches' | 'visits'>('inventory');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
@@ -284,6 +287,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             }`}
           >
             Orders Placed ({orders.length})
+          </button>
+
+          <button
+            onClick={() => setActiveTab('inquiries')}
+            className={`pb-3 text-xs font-semibold uppercase tracking-wider cursor-pointer border-b-2 transition-all ${
+              activeTab === 'inquiries'
+                ? 'border-[#25D366] text-[#20BA5A]'
+                : 'border-transparent text-[#86736A] hover:text-[#1C1C18]'
+            }`}
+          >
+            WhatsApp Inquiries ({chatInquiries.length})
           </button>
 
           <button
@@ -633,6 +647,75 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           </li>
                         ))}
                       </ul>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* TAB 3: WHATSAPP CHAT INQUIRIES */}
+        {activeTab === 'inquiries' && (
+          <div className="bg-[#FFFFFF] border border-[#E7E2DA] rounded-[4px] p-6 shadow-2xs space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#E7E2DA] pb-4 gap-2">
+              <div>
+                <h3 className="font-serif text-lg font-medium text-[#1C1C18]">
+                  WhatsApp Showroom Inquiries ({chatInquiries.length})
+                </h3>
+                <p className="text-xs text-[#53433B]">
+                  Direct questions sent by shoppers using the confidential on-site WhatsApp Concierge.
+                </p>
+              </div>
+              <span className="px-3 py-1 bg-[#25D366]/10 text-[#20BA5A] font-semibold text-[11px] rounded-full self-start sm:self-auto">
+                Relay Active
+              </span>
+            </div>
+
+            {chatInquiries.length === 0 ? (
+              <p className="text-xs text-[#86736A] py-8 text-center italic">
+                No WhatsApp chat inquiries yet. Test the floating concierge bubble in the bottom right corner of the website!
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {chatInquiries.map((inq) => (
+                  <div
+                    key={inq.id}
+                    className="p-4 rounded-[4px] border border-[#E7E2DA] bg-[#FBF9F5] space-y-2 text-xs"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center space-x-2">
+                        <span className="font-semibold text-sm text-[#1C1C18]">{inq.clientName}</span>
+                        {inq.category && (
+                          <span className="px-2 py-0.5 rounded-[2px] bg-[#E7E2DA] text-[#53433B] text-[10px] font-medium">
+                            {inq.category}
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[#86736A] text-[10px]">
+                        {new Date(inq.createdAt).toLocaleString()}
+                      </span>
+                    </div>
+
+                    <div className="bg-[#FFFFFF] p-3 rounded-[3px] border border-[#E7E2DA] text-[#1C1C18] font-sans italic">
+                      "{inq.message}"
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-between pt-1 gap-2">
+                      <div className="text-[#53433B]">
+                        Contact: <strong className="text-[#1C1C18]">{inq.clientContact}</strong>
+                      </div>
+
+                      {/* 1-Click WhatsApp Reply Link */}
+                      <a
+                        href={`https://wa.me/${inq.clientContact.replace(/[^0-9]/g, '')}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-[#25D366] hover:bg-[#20BA5A] text-[#FFFFFF] rounded-[3px] font-semibold text-[11px] transition-colors cursor-pointer"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5" />
+                        <span>Reply on WhatsApp</span>
+                      </a>
                     </div>
                   </div>
                 ))}

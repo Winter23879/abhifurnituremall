@@ -42,6 +42,16 @@ export interface ShowroomVisitRecord {
   notes?: string;
 }
 
+export interface ChatInquiryRecord {
+  id: string;
+  createdAt: string;
+  clientName: string;
+  clientContact: string;
+  message: string;
+  category?: string;
+  status: 'new' | 'contacted' | 'resolved';
+}
+
 export interface AdminAuthSession {
   isAuthenticated: boolean;
   email: string;
@@ -59,6 +69,7 @@ export const STORAGE_KEYS = {
   orders: 'afh_orders_v1',
   swatches: 'afh_swatches_v1',
   visits: 'afh_visits_v1',
+  chatInquiries: 'afh_chat_inquiries_v1',
   products: 'afh_products_v1',
   adminAuth: 'afh_admin_auth_v1',
 } as const;
