@@ -34,13 +34,13 @@ export const SpacesLookbook: React.FC<SpacesLookbookProps> = ({
           <div>
             <div className="inline-flex items-center space-x-2 text-xs font-semibold text-[#804116] uppercase tracking-[0.06em] mb-2">
               <Compass className="w-3.5 h-3.5 text-[#9E582C]" />
-              <span>Architectural Lookbook & In-Situ Spaces · గృహ సామరస్యం</span>
+              <span>Living Spaces Lookbook & Design Ideas</span>
             </div>
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-medium tracking-tight text-[#1C1C18]">
               Spaces In Harmony
             </h1>
             <p className="text-base text-[#53433B] mt-2 max-w-2xl font-serif italic">
-              Experience Abhi Furniture Hall creations placed within master-crafted residences in Vijayawada, Visakhapatnam, and Araku Valley.
+              Experience Abhi Furniture Mall pieces styled inside homes across Vijayawada, Visakhapatnam, and Hyderabad.
             </p>
           </div>
 

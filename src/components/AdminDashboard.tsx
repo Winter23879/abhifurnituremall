@@ -199,7 +199,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(products, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', `afh-catalog-${new Date().toISOString().split('T')[0]}.json`);
+    downloadAnchor.setAttribute('download', `afm-catalog-${new Date().toISOString().split('T')[0]}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -212,7 +212,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       <div className="sticky top-0 z-30 bg-[#2A2825]/95 backdrop-blur-md text-[#F5F1EB] px-4 sm:px-6 lg:px-12 py-3 flex flex-wrap justify-between items-center border-b border-[#3B3835] shadow-sm">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 rounded-full bg-[#9E582C] text-[#FFFFFF] flex items-center justify-center font-serif font-bold text-xs shadow-xs">
-            AFH
+            AFM
           </div>
           <div>
             <div className="flex items-center space-x-2">

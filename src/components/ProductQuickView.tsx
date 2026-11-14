@@ -94,11 +94,11 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
           <div className="md:col-span-6 p-6 sm:p-8 flex flex-col justify-between bg-[#FBF9F5]">
             <div className="space-y-5">
               <div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                   <span className="text-xs uppercase tracking-[0.06em] font-semibold text-[#804116]">
                     {product.category} · {product.designer}
                   </span>
-                  <span className="font-serif text-lg text-[#86736A]">
+                  <span className="text-xs text-[#86736A] font-medium truncate max-w-[50%] text-right">
                     {product.japaneseName}
                   </span>
                 </div>
@@ -225,9 +225,9 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
                   onAddToCart(product, selectedWood, selectedFabric);
                   onClose();
                 }}
-                className="w-full py-3.5 px-7 bg-[#9E582C] text-[#FBF9F5] text-xs font-semibold uppercase tracking-[0.04em] rounded-[4px] hover:bg-[#2A2825] transition-colors duration-200 flex items-center justify-center space-x-2 shadow-sm"
+                className="w-full py-3.5 px-7 bg-[#9E582C] text-[#FBF9F5] text-xs font-semibold uppercase tracking-[0.04em] rounded-[4px] hover:bg-[#2A2825] transition-colors duration-200 flex items-center justify-center space-x-2 shadow-sm cursor-pointer"
               >
-                <span>Add Selected Configuration To Archive</span>
+                <span>Add to Cart</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
@@ -236,9 +236,9 @@ export const ProductQuickView: React.FC<ProductQuickViewProps> = ({
                   onViewFullSpecs(product);
                   onClose();
                 }}
-                className="w-full py-2.5 text-xs text-[#53433B] hover:text-[#9E582C] font-semibold uppercase tracking-wider text-center underline underline-offset-4 decoration-[#D4A373] transition-colors"
+                className="w-full py-2.5 text-xs text-[#53433B] hover:text-[#9E582C] font-semibold uppercase tracking-wider text-center underline underline-offset-4 decoration-[#D4A373] transition-colors cursor-pointer"
               >
-                View Complete Architectural Spec Sheet & CAD Notes →
+                View Full Product Details & Dimensions →
               </button>
             </div>
           </div>

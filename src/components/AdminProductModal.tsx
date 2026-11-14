@@ -85,7 +85,7 @@ export const AdminProductModal: React.FC<AdminProductModalProps> = ({
       setArchitecturalNotes(productToEdit.architecturalNotes || '');
       setJoinery(productToEdit.joinery || 'Traditional Mortise & Tenon');
       setLeadTime(productToEdit.leadTime || 'Made to order in 4 weeks');
-      setDesigner(productToEdit.designer || 'Studio AFH');
+      setDesigner(productToEdit.designer || 'Abhi Furniture Mall Studio');
       setFeatured(Boolean(productToEdit.featured));
       setWoodOptions(
         productToEdit.woodOptions?.length ? productToEdit.woodOptions : DEFAULT_WOOD_OPTIONS
@@ -109,7 +109,7 @@ export const AdminProductModal: React.FC<AdminProductModalProps> = ({
       setArchitecturalNotes('Engineered with low sightline clearance to integrate seamlessly into open residential pavilions.');
       setJoinery('Hand-chiseled mortise and tenon joinery; zero visible metal fasteners');
       setLeadTime('Made to order in 3–5 weeks');
-      setDesigner('Studio AFH & Sørensen');
+      setDesigner('Abhi Furniture Mall Studio');
       setFeatured(false);
       setWoodOptions(DEFAULT_WOOD_OPTIONS);
       setFabricOptions(DEFAULT_FABRIC_OPTIONS);
@@ -169,7 +169,7 @@ export const AdminProductModal: React.FC<AdminProductModalProps> = ({
     const savedProduct: Product = {
       id,
       name: name.trim(),
-      japaneseName: japaneseName.trim() || 'శిల్పకళ',
+      japaneseName: japaneseName.trim() || 'Handcrafted Solid Wood',
       category,
       price: Number(price),
       badge: badge.trim() || undefined,
@@ -190,7 +190,7 @@ export const AdminProductModal: React.FC<AdminProductModalProps> = ({
       architecturalNotes: architecturalNotes.trim() || 'Designed for organic harmony and architectural balance.',
       joinery: joinery.trim() || 'Traditional hand-chiseled joinery',
       leadTime: leadTime.trim() || 'Made to order in 3–5 weeks',
-      designer: designer.trim() || 'Studio AFH',
+      designer: designer.trim() || 'Abhi Furniture Mall Studio',
       rating: productToEdit?.rating || 5.0,
       reviewCount: productToEdit?.reviewCount || 1,
       featured,
@@ -258,13 +258,13 @@ export const AdminProductModal: React.FC<AdminProductModalProps> = ({
 
               <div>
                 <label className="block font-semibold text-[#1C1C18] uppercase tracking-wider mb-1">
-                  Telugu / Subtitle Script
+                  Product Subtitle / Material Spec
                 </label>
                 <input
                   type="text"
                   value={japaneseName}
                   onChange={(e) => setJapaneseName(e.target.value)}
-                  placeholder="e.g. ఆకుచాటు వెలుగు or Minimalist Armchair"
+                  placeholder="e.g. Solid Oak & Bouclé Lounge Chair"
                   className="w-full px-3 py-2 text-xs bg-[#FBF9F5] border border-[#E7E2DA] rounded-[4px] focus:outline-none focus:border-[#9E582C]"
                 />
               </div>
@@ -325,7 +325,7 @@ export const AdminProductModal: React.FC<AdminProductModalProps> = ({
                   type="text"
                   value={designer}
                   onChange={(e) => setDesigner(e.target.value)}
-                  placeholder="e.g. Studio AFH & Sørensen"
+                  placeholder="e.g. Abhi Furniture Mall Studio"
                   className="w-full px-3 py-2 text-xs bg-[#FBF9F5] border border-[#E7E2DA] rounded-[4px] focus:outline-none focus:border-[#9E582C]"
                 />
               </div>

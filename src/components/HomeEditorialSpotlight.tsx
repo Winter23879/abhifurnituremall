@@ -131,7 +131,7 @@ export const HomeEditorialSpotlight: React.FC<HomeEditorialSpotlightProps> = ({
         <div className="relative rounded-[4px] overflow-hidden border border-[#E7E2DA] bg-[#2A2825] h-[340px] sm:h-[420px] lg:h-[480px] shadow-[0_12px_36px_-8px_rgba(42,40,37,0.1)] group">
           <img
             src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1600&q=85"
-            alt="Warm architectural living sanctuary at Abhi Furniture Hall"
+            alt="Warm solid wood living sanctuary at Abhi Furniture Mall"
             decoding="async"
             className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform"
           />

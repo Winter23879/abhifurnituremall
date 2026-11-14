@@ -178,11 +178,21 @@ export default function App() {
     }
   };
 
-  // Selected Category for Full-Screen Store View
+  // Selected Category & Search Query for Full-Screen Store View
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [catalogSearchQuery, setCatalogSearchQuery] = useState<string>('');
 
   const openStoreCategory = (category: string) => {
     setSelectedCategory(category);
+    setCatalogSearchQuery('');
+    setSelectedDetailProduct(null);
+    setActiveTab('catalog');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNavbarSearch = (query: string) => {
+    setCatalogSearchQuery(query);
+    setSelectedCategory('all');
     setSelectedDetailProduct(null);
     setActiveTab('catalog');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -297,6 +307,7 @@ export default function App() {
         onOpenWishlist={() => setIsWishlistOpen(true)}
         onOpenSampleKit={() => setIsSampleKitOpen(true)}
         onOpenVisitModal={() => setIsVisitModalOpen(true)}
+        onSearch={handleNavbarSearch}
       />
 
       {/* Main View Switcher */}
@@ -338,7 +349,7 @@ export default function App() {
           ) : (
             <div className="max-w-md mx-auto py-24 px-4 text-center space-y-5">
               <div className="w-12 h-12 mx-auto rounded-full bg-[#9E582C]/10 border border-[#9E582C]/20 flex items-center justify-center text-[#9E582C]">
-                <span className="font-serif font-bold text-lg">AFH</span>
+                <span className="font-serif font-bold text-lg">AFM</span>
               </div>
               <h2 className="font-serif text-3xl font-medium text-[#1C1C18]">
                 Staff & Studio Authentication
@@ -391,6 +402,7 @@ export default function App() {
             onAddToCart={(p) => handleAddToCart(p)}
             wishlistIds={wishlistIds}
             onToggleWishlist={handleToggleWishlist}
+            initialSearchQuery={catalogSearchQuery}
           />
         ) : (
           /* Landing Page: Full-Screen Carousel, Category Tiles, Spatial Studio, Spotlight & Values */
@@ -420,7 +432,7 @@ export default function App() {
                       Stage Your Sanctuary in Spatial Studio
                     </h3>
                     <p className="text-xs sm:text-sm text-[#53433B] leading-relaxed">
-                      Calibrate furniture circulation and measure negative space (<em className="italic">విశాల అంతరం</em>) in meters before ordering. Review room bundles with custom timber specifications.
+                      Calibrate furniture circulation and plan room layouts in meters before ordering. Review full home sets with custom timber finishes.
                     </p>
                   </div>
 

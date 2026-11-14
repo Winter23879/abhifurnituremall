@@ -117,11 +117,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             <div className="flex items-center space-x-2">
               <span className="w-2 h-2 rounded-full bg-[#9E582C]"></span>
               <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-[#804116]">
-                Abhi Furniture Hall Order Bag
+                Abhi Furniture Mall
               </span>
             </div>
             <h2 id="cart-title" className="font-serif text-xl sm:text-2xl font-medium text-[#1C1C18] mt-0.5">
-              Your Curated Archive ({totals.itemCount})
+              Your Shopping Cart ({totals.itemCount})
             </h2>
           </div>
 
@@ -156,14 +156,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
               <a
                 href={`https://wa.me/918662489100?text=${encodeURIComponent(
-                  `Hello Abhi Furniture Hall, my order reference is ${submittedOrder.id} for ${submittedOrder.clientCity} (${submittedOrder.clientPinCode}). Estimated total: ${formatPrice(submittedOrder.total)}.`
+                  `Hello Abhi Furniture Mall, my order reference is ${submittedOrder.id} for ${submittedOrder.clientCity} (${submittedOrder.clientPinCode}). Estimated total: ${formatPrice(submittedOrder.total)}.`
                 )}`}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full py-3 px-6 border border-[#2A2825] text-[#2A2825] text-xs font-semibold uppercase tracking-wider rounded-[4px] hover:bg-[#F5F1EB] transition-colors flex items-center justify-center space-x-2"
               >
                 <MessageCircle className="w-4 h-4 text-[#9E582C]" />
-                <span>Share Specification on WhatsApp</span>
+                <span>Share Order on WhatsApp</span>
               </a>
 
               <button
@@ -176,7 +176,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 }}
                 className="w-full py-3.5 px-6 bg-[#9E582C] text-[#FBF9F5] text-xs font-semibold uppercase tracking-wider rounded-[4px] hover:bg-[#2A2825] transition-colors cursor-pointer"
               >
-                Return to Studio
+                Continue Shopping
               </button>
             </div>
           ) : isCheckingOut ? (
@@ -297,7 +297,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <div className="w-12 h-12 mx-auto rounded-full bg-[#F5F1EB] border border-[#E7E2DA] flex items-center justify-center text-[#86736A]">
                 <Truck className="w-6 h-6" />
               </div>
-              <h3 className="font-serif text-lg text-[#1C1C18]">Your Archive Bag is Empty</h3>
+              <h3 className="font-serif text-lg text-[#1C1C18]">Your Shopping Cart is Empty</h3>
               <p className="text-xs text-[#53433B] max-w-xs mx-auto leading-relaxed">
                 Explore handcrafted solid timber pieces, add 2+ pieces to unlock Buy More, Save More discounts.
               </p>
@@ -514,13 +514,23 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               onClick={() => setIsCheckingOut(true)}
               className="w-full py-3.5 px-7 bg-[#9E582C] text-[#FBF9F5] text-xs font-semibold uppercase tracking-[0.06em] rounded-[4px] hover:bg-[#2A2825] transition-colors duration-200 flex items-center justify-center space-x-2 shadow-sm cursor-pointer"
             >
-              <span>Proceed to Delivery Details</span>
+              <span>Proceed to Checkout</span>
               <ArrowRight className="w-4 h-4" />
             </button>
 
-            <div className="flex items-center justify-center space-x-2 text-[10px] text-[#86736A] uppercase tracking-wider">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#9E582C]" />
-              <span>12-Year Structural Guarantee · Andhra Pradesh & Pan-India Freight</span>
+            {/* Payment & Trust Signals */}
+            <div className="pt-2 border-t border-[#F5F1EB] space-y-2">
+              <div className="flex items-center justify-center space-x-3 text-[10px] text-[#6A635E] font-medium">
+                <span className="px-2 py-0.5 bg-[#F5F1EB] rounded border border-[#E7E2DA]">UPI / GPay</span>
+                <span className="px-2 py-0.5 bg-[#F5F1EB] rounded border border-[#E7E2DA]">PhonePe</span>
+                <span className="px-2 py-0.5 bg-[#F5F1EB] rounded border border-[#E7E2DA]">RuPay</span>
+                <span className="px-2 py-0.5 bg-[#F5F1EB] rounded border border-[#E7E2DA]">Cards</span>
+                <span className="px-2 py-0.5 bg-[#F5F1EB] rounded border border-[#E7E2DA]">No-Cost EMI</span>
+              </div>
+              <div className="flex items-center justify-center space-x-2 text-[10px] text-[#86736A] uppercase tracking-wider text-center">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#9E582C] shrink-0" />
+                <span>10-Year Timber Warranty · Free Transit Insurance · Easy Returns</span>
+              </div>
             </div>
           </div>
         )}

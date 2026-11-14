@@ -54,10 +54,10 @@ export const BrandValues: React.FC<BrandValuesProps> = ({ onExploreCraft }) => {
         {/* Centered Header */}
         <div className="text-center max-w-2xl mx-auto space-y-2.5">
           <span className="text-[11px] uppercase tracking-[0.12em] font-semibold text-[#804116] block">
-            Our Pillars · హస్తకళ మరియు నిజాయితీ
+            Our Core Principles
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#1C1C18] tracking-tight">
-            The Values That Define Abhi Furniture Hall
+            The Values That Define Abhi Furniture Mall
           </h2>
           <p className="text-xs sm:text-sm text-[#53433B] leading-relaxed">
             Rooted in human touch, skilled craftsmanship, thoughtful design and conscious choices that shape everything we create.

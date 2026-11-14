@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Product } from '../data/products';
 import { formatPrice } from '../utils/pricing';
 import { ProductCard } from './ProductCard';
@@ -21,6 +21,7 @@ interface StorePageProps {
   onAddToCart: (product: Product) => void;
   wishlistIds?: string[];
   onToggleWishlist?: (productId: string) => void;
+  initialSearchQuery?: string;
 }
 
 const CATEGORY_OPTIONS = [
@@ -61,15 +62,22 @@ export const StorePage: React.FC<StorePageProps> = ({
   onAddToCart,
   wishlistIds = [],
   onToggleWishlist,
+  initialSearchQuery = '',
 }) => {
   const [selectedMaterial, setSelectedMaterial] = useState<string>('all');
   const [pricePreset, setPricePreset] = useState<string>('all');
   const [maxPrice, setMaxPrice] = useState<number>(150000);
   const [availability, setAvailability] = useState<'all' | 'in-stock' | 'made-to-order'>('all');
   const [minRating, setMinRating] = useState<number>(0);
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>(initialSearchQuery);
   const [sortBy, setSortBy] = useState<'featured' | 'price-asc' | 'price-desc' | 'name'>('featured');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (initialSearchQuery !== undefined) {
+      setSearchQuery(initialSearchQuery);
+    }
+  }, [initialSearchQuery]);
 
   const activeCategoryLabel =
     CATEGORY_OPTIONS.find((c) => c.id === selectedCategory)?.label || 'All Pieces';
@@ -397,7 +405,7 @@ export const StorePage: React.FC<StorePageProps> = ({
 
             <h1 className="font-serif text-3xl sm:text-4xl font-normal text-[#1C1C18]">
               {activeCategoryLabel === 'All Pieces'
-                ? 'Abhi Furniture Hall — Full Store'
+                ? 'Abhi Furniture Mall — Full Collection'
                 : `${activeCategoryLabel} Collection`}
             </h1>
             <p className="text-xs sm:text-sm text-[#53433B]">

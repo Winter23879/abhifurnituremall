@@ -196,13 +196,13 @@ export const SpatialStudio: React.FC<SpatialStudioProps> = ({
           <div>
             <div className="inline-flex items-center space-x-2 text-xs font-semibold text-[#804116] uppercase tracking-[0.06em] mb-2">
               <Compass className="w-3.5 h-3.5 text-[#9E582C]" />
-              <span>Architectural Space Planning · గది ప్రణాళిక</span>
+              <span>Interactive 2D Room Planner</span>
             </div>
             <h1 className="font-serif text-3xl sm:text-4xl text-[#1C1C18] font-medium tracking-tight">
-              The Sanctuary Spatial Studio
+              Interactive Room Planner
             </h1>
             <p className="text-sm text-[#53433B] mt-1 max-w-2xl">
-              Arrange Japandi furniture in architectural scale. Monitor negative space (<em className="italic">Ma</em>), proportion harmony, and balance natural airflow before finalizing your collection.
+              Arrange furniture to scale in your room dimensions. Measure floor clearance, doorways, and circulation space before ordering.
             </p>
           </div>
 
@@ -389,7 +389,7 @@ export const SpatialStudio: React.FC<SpatialStudioProps> = ({
             <div className="bg-[#FFFFFF] border border-[#E7E2DA] rounded-[4px] p-6 shadow-sm space-y-4">
               <div className="flex items-center justify-between border-b border-[#E7E2DA] pb-3">
                 <h3 className="font-serif text-lg font-medium text-[#1C1C18]">
-                  Spatial Harmony (విశాల అంతరం · స్థలం)
+                  Room Space & Flow Analysis
                 </h3>
                 <span
                   className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${

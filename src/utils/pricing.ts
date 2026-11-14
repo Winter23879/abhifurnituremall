@@ -60,7 +60,7 @@ export function evaluatePromoCode(code: string): number {
   const normalized = code.trim().toUpperCase();
   if (normalized === 'FESTIVE15') return 0.15;
   if (normalized === 'DIWALI10') return 0.10;
-  if (normalized === 'AFH5') return 0.05;
+  if (normalized === 'AFM5' || normalized === 'AFH5') return 0.05;
   return 0;
 }
 

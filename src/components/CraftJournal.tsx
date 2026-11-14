@@ -17,7 +17,7 @@ export const CraftJournal: React.FC<CraftJournalProps> = ({
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="inline-flex items-center space-x-2 text-xs font-semibold text-[#804116] uppercase tracking-[0.06em]">
             <TreePine className="w-3.5 h-3.5 text-[#9E582C]" />
-            <span>Materiality & Philosophy · తత్వశాస్త్రం మరియు హస్తకళ</span>
+            <span>Materiality & Craft Philosophy</span>
           </div>
           <h1 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight text-[#1C1C18]">
             The Art of Thoughtful Restraint
@@ -35,7 +35,7 @@ export const CraftJournal: React.FC<CraftJournalProps> = ({
           <div className="bg-[#FFFFFF] border border-[#E7E2DA] rounded-[4px] p-6 space-y-3 shadow-sm hover:border-[#D4A373] transition-colors">
             <span className="font-serif text-2xl text-[#9E582C]">01</span>
             <h3 className="font-serif text-lg font-medium text-[#1C1C18]">
-              సహజ సొగసు (సున్నితత్వం)
+              Subtle Grace (Shibui)
             </h3>
             <p className="text-xs text-[#53433B] leading-relaxed">
               Subtle, unobtrusive elegance. We favor unfinished and matte organic surfaces that mature alongside the home, developing a deep, tactile patina over decades.
@@ -45,7 +45,7 @@ export const CraftJournal: React.FC<CraftJournalProps> = ({
           <div className="bg-[#FFFFFF] border border-[#E7E2DA] rounded-[4px] p-6 space-y-3 shadow-sm hover:border-[#D4A373] transition-colors">
             <span className="font-serif text-2xl text-[#9E582C]">02</span>
             <h3 className="font-serif text-lg font-medium text-[#1C1C18]">
-              సరళత (నిరాడంబరత)
+              Essential Simplicity (Kanso)
             </h3>
             <p className="text-xs text-[#53433B] leading-relaxed">
               The deliberate elimination of excess. Every contour, chamfer, and leg placement serves a structural or ergonomic purpose, leaving pure calm.
@@ -55,7 +55,7 @@ export const CraftJournal: React.FC<CraftJournalProps> = ({
           <div className="bg-[#FFFFFF] border border-[#E7E2DA] rounded-[4px] p-6 space-y-3 shadow-sm hover:border-[#D4A373] transition-colors">
             <span className="font-serif text-2xl text-[#9E582C]">03</span>
             <h3 className="font-serif text-lg font-medium text-[#1C1C18]">
-              సహజత్వం (ప్రకృతి సిద్ధత)
+              Organic Honesty (Shizen)
             </h3>
             <p className="text-xs text-[#53433B] leading-relaxed">
               Naturalness without artifice. We honor the wood grain's natural curvature, slight sapwood tonal variations, and the porous honesty of honed stone.
@@ -65,10 +65,10 @@ export const CraftJournal: React.FC<CraftJournalProps> = ({
           <div className="bg-[#FFFFFF] border border-[#E7E2DA] rounded-[4px] p-6 space-y-3 shadow-sm hover:border-[#D4A373] transition-colors">
             <span className="font-serif text-2xl text-[#9E582C]">04</span>
             <h3 className="font-serif text-lg font-medium text-[#1C1C18]">
-              విశాల అంతరం (ఖాళీ స్థలం)
+              Balanced Space (Ma)
             </h3>
             <p className="text-xs text-[#53433B] leading-relaxed">
-              The meaningful pause. Japandi architecture does not fill rooms—it frames the quiet expanse of empty floor and diffused daylight between objects.
+              The meaningful pause. High design does not overcrowd rooms—it frames the quiet expanse of empty floor and diffused daylight between objects.
             </p>
           </div>
         </div>
@@ -93,7 +93,7 @@ export const CraftJournal: React.FC<CraftJournalProps> = ({
                   Interlocking Craft, Zero Obtrusive Hardware
                 </h2>
                 <p className="text-sm text-[#53433B] leading-relaxed">
-                  Every Abhi Furniture Hall dining table, lounge frame, and platform bed utilizes century-old Japanese sashimono and Scandinavian mortise-and-tenon principles. Because wood naturally breathes, expands, and contracts across seasons, interlocking wood joints distribute load organically without loosening over time.
+                  Every Abhi Furniture Mall dining table, lounge frame, and platform bed utilizes proven solid wood mortise-and-tenon and interlocking joinery principles. Because wood naturally breathes, expands, and contracts across seasons, interlocking wood joints distribute load organically without loosening over time.
                 </p>
                 <p className="text-sm text-[#53433B] leading-relaxed">
                   Finished exclusively with non-toxic organic tung oils and natural beeswax—never synthetic polyurethane coats that trap moisture and mask the wood’s natural aroma.

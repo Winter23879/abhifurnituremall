@@ -109,9 +109,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
           <button
             onClick={() => onAddToCart(product)}
-            aria-label={`Add ${product.name} to archive bag`}
-            className="p-2.5 bg-[#9E582C] text-[#FBF9F5] rounded-[4px] hover:bg-[#2A2825] transition-colors shadow-sm"
-            title="Add to Archive"
+            aria-label={`Add ${product.name} to cart`}
+            className="p-2.5 bg-[#9E582C] text-[#FBF9F5] rounded-[4px] hover:bg-[#2A2825] transition-colors shadow-sm cursor-pointer"
+            title="Add to Cart"
           >
             <Plus className="w-4 h-4" />
           </button>
@@ -121,12 +121,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {/* Product Information Card Body */}
       <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 border-t border-[#E7E2DA]">
         <div>
-          {/* Collection tag and Japanese subtitle */}
+          {/* Collection tag and descriptive subtitle */}
           <div className="flex items-center justify-between text-xs text-[#86736A] mb-1">
             <span className="uppercase tracking-[0.06em] text-[11px] font-semibold text-[#804116]">
               {product.category}
             </span>
-            <span className="font-serif text-sm text-[#86736A]">
+            <span className="text-[11px] text-[#86736A] font-normal truncate max-w-[55%] text-right" title={product.japaneseName}>
               {product.japaneseName}
             </span>
           </div>

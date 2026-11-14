@@ -22,7 +22,7 @@ export const SPACES: ArchitecturalSpace[] = [
   {
     id: 'amaravati-pavilion',
     title: 'Amaravati Courtyard Pavilion',
-    japaneseSubtitle: 'విజయవాడ · సామరస్యం',
+    japaneseSubtitle: 'Courtyard Living Room',
     location: 'Vijayawada, Andhra Pradesh',
     architect: 'Studio Kanso Architects',
     concept: 'An open-air living sanctuary where indoor warmth meets shaded courtyard greenery along the Krishna River corridor. Low furniture proportions frame continuous horizontal views.',
@@ -57,7 +57,7 @@ export const SPACES: ArchitecturalSpace[] = [
   {
     id: 'vizag-coastal',
     title: 'Visakhapatnam Coastal Residence',
-    japaneseSubtitle: 'విశాఖపట్నం · వెలుగు',
+    japaneseSubtitle: 'Coastal Sunlit Dining',
     location: 'Visakhapatnam, Andhra Pradesh',
     architect: 'Mette Lind & Sørensen',
     concept: 'Flooded with diffused Bay of Bengal coastal light, this high-ceilinged Beach Road residence pairs natural timber floors with warm terracotta textures and tactile rush seating.',
@@ -92,7 +92,7 @@ export const SPACES: ArchitecturalSpace[] = [
   {
     id: 'araku-timber',
     title: 'Araku Valley Forest Haven',
-    japaneseSubtitle: 'అరకు · ప్రశాంతత',
+    japaneseSubtitle: 'Forest Bedroom Suite',
     location: 'Araku Valley, Andhra Pradesh',
     architect: 'Takashi Oki & Associates',
     concept: 'Nestled in the Eastern Ghats coffee hills of Andhra Pradesh, this bedroom suite highlights natural lime plaster walls, aromatic Hinoki timber joinery, and grounded low-slung lines.',

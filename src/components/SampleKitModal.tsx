@@ -81,7 +81,7 @@ export const SampleKitModal: React.FC<SampleKitModalProps> = ({
               Tactile Swatch Kit Dispatched
             </h3>
             <p className="text-xs text-[#53433B] leading-relaxed max-w-md mx-auto">
-              Your personalized Abhi Furniture Hall material box has been scheduled for preparation at our Vijayawada workshop and will ship to <strong className="text-[#1C1C18]">{submittedRecord.address} ({submittedRecord.pinCode})</strong>.
+              Your personalized Abhi Furniture Mall material box has been scheduled for preparation at our Vijayawada workshop and will ship to <strong className="text-[#1C1C18]">{submittedRecord.address} ({submittedRecord.pinCode})</strong>.
             </p>
             <div className="p-3 bg-[#FBF9F5] border border-[#E7E2DA] rounded-[4px] text-xs font-mono text-[#53433B] space-y-1">
               <div>Ref: {submittedRecord.id}</div>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ShoppingBag, Heart, Menu, X, ArrowRight, Sparkles, MapPin } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { ShoppingBag, Heart, Menu, X, ArrowRight, Sparkles, MapPin, Search } from 'lucide-react';
 
 interface NavbarProps {
   activeTab: 'home' | 'catalog' | 'spaces' | 'planner' | 'craft' | 'admin';
@@ -13,6 +13,7 @@ interface NavbarProps {
   onSelectCategory?: (cat: string) => void;
   onOpenAdmin?: () => void;
   isAdminLoggedIn?: boolean;
+  onSearch?: (query: string) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -24,8 +25,41 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenWishlist,
   onOpenSampleKit,
   onOpenVisitModal,
+  onSearch,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (searchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [searchOpen]);
+
+  const handleSearchSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!searchQuery.trim()) return;
+    if (onSearch) {
+      onSearch(searchQuery.trim());
+    } else {
+      setActiveTab('catalog');
+    }
+    setSearchOpen(false);
+    setMobileMenuOpen(false);
+  };
+
+  const handleQuickSearch = (term: string) => {
+    setSearchQuery(term);
+    if (onSearch) {
+      onSearch(term);
+    } else {
+      setActiveTab('catalog');
+    }
+    setSearchOpen(false);
+    setMobileMenuOpen(false);
+  };
 
   const navLinks = [
     { id: 'catalog', label: 'Furniture' },
@@ -33,6 +67,16 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'planner', label: 'Room Planner' },
     { id: 'craft', label: 'Our Craft' },
   ] as const;
+
+  const quickSearchPills = [
+    'Sofa',
+    'Dining Table',
+    'Platform Bed',
+    'Writing Desk',
+    'Lounge Chair',
+    'Oak Credenza',
+    'Lighting',
+  ];
 
   return (
     <header className="sticky top-0 z-40 bg-[#FBF9F5]/95 backdrop-blur-md border-b border-[#E7E2DA] transition-all">
@@ -108,7 +152,18 @@ export const Navbar: React.FC<NavbarProps> = ({
         </nav>
 
         {/* Right: Thoughtful, Spacious Action Buttons */}
-        <div className="flex items-center space-x-3 sm:space-x-4">
+        <div className="flex items-center space-x-2 sm:space-x-3">
+          {/* Search Trigger Button */}
+          <button
+            type="button"
+            onClick={() => setSearchOpen(!searchOpen)}
+            aria-label="Search furniture"
+            className="p-2 sm:p-2.5 rounded-[4px] text-[#53433B] hover:text-[#1C1C18] hover:bg-[#F5F1EB] transition-colors cursor-pointer"
+            title="Search catalog"
+          >
+            <Search className="w-5 h-5 text-[#53433B]" />
+          </button>
+
           {/* Swatch Quick Order (Desktop) */}
           <button
             onClick={onOpenSampleKit}
@@ -124,7 +179,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               type="button"
               onClick={onOpenWishlist}
               aria-label="Saved pieces"
-              className="relative p-2.5 rounded-[4px] text-[#53433B] hover:text-[#1C1C18] hover:bg-[#F5F1EB] transition-colors cursor-pointer"
+              className="relative p-2 sm:p-2.5 rounded-[4px] text-[#53433B] hover:text-[#1C1C18] hover:bg-[#F5F1EB] transition-colors cursor-pointer"
               title="Saved pieces"
             >
               <Heart
@@ -133,7 +188,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               />
               {wishlistCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-[#9E582C] text-[#FFFFFF] text-[10px] font-bold flex items-center justify-center leading-none">
+                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#9E582C] text-[#FFFFFF] text-[10px] font-bold flex items-center justify-center leading-none">
                   {wishlistCount}
                 </span>
               )}
@@ -161,16 +216,86 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Open menu"
-            className="md:hidden p-2 text-[#1C1C18] hover:bg-[#F5F1EB] rounded-[4px] transition-colors"
+            className="md:hidden p-2 text-[#1C1C18] hover:bg-[#F5F1EB] rounded-[4px] transition-colors cursor-pointer"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6 text-[#1C1C18]" />}
           </button>
         </div>
       </div>
 
+      {/* Expandable Global Header Search Bar */}
+      {searchOpen && (
+        <div className="bg-[#FFFFFF] border-b border-[#E7E2DA] px-4 sm:px-6 lg:px-12 py-4 animate-fadeIn shadow-sm">
+          <div className="max-w-[800px] mx-auto space-y-3">
+            <form onSubmit={handleSearchSubmit} className="relative flex items-center">
+              <Search className="absolute left-3.5 w-4 h-4 text-[#86736A]" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search furniture (e.g., Sofa, Dining Table, Bed, Desk, Oak, Linen)..."
+                className="w-full pl-10 pr-24 py-2.5 text-xs sm:text-sm bg-[#FBF9F5] border border-[#E7E2DA] rounded-[4px] text-[#1C1C18] placeholder-[#86736A] focus:outline-none focus:border-[#9E582C]"
+              />
+              <div className="absolute right-2 flex items-center space-x-1.5">
+                <button
+                  type="submit"
+                  className="px-3 py-1.5 bg-[#9E582C] text-[#FBF9F5] text-xs font-semibold uppercase tracking-wider rounded-[3px] hover:bg-[#2A2825] transition-colors cursor-pointer"
+                >
+                  Search
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSearchOpen(false)}
+                  className="p-1.5 text-[#86736A] hover:text-[#1C1C18] cursor-pointer"
+                  title="Close search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </form>
+
+            {/* Quick Suggestion Pills */}
+            <div className="flex items-center flex-wrap gap-1.5 text-xs">
+              <span className="text-[11px] font-semibold text-[#86736A] uppercase tracking-wider mr-1">
+                Popular:
+              </span>
+              {quickSearchPills.map((pill) => (
+                <button
+                  key={pill}
+                  type="button"
+                  onClick={() => handleQuickSearch(pill)}
+                  className="px-2.5 py-1 bg-[#F5F1EB] hover:bg-[#9E582C] text-[#53433B] hover:text-[#FFFFFF] rounded-full text-xs transition-colors cursor-pointer border border-[#E7E2DA]"
+                >
+                  {pill}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-[#FFFFFF] border-b border-[#E7E2DA] px-6 py-6 space-y-5 animate-fadeIn">
+          {/* Mobile Search Input */}
+          <form onSubmit={handleSearchSubmit} className="relative flex items-center">
+            <Search className="absolute left-3 w-4 h-4 text-[#86736A]" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search sofa, bed, table, desk..."
+              className="w-full pl-9 pr-16 py-2.5 text-xs bg-[#FBF9F5] border border-[#E7E2DA] rounded-[4px] text-[#1C1C18] focus:outline-none focus:border-[#9E582C]"
+            />
+            <button
+              type="submit"
+              className="absolute right-1.5 px-3 py-1 bg-[#9E582C] text-white text-[11px] font-semibold uppercase rounded-[3px]"
+            >
+              Go
+            </button>
+          </form>
+
           <div className="flex flex-col space-y-1 divide-y divide-[#E7E2DA]">
             <button
               onClick={() => {
