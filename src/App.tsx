@@ -106,6 +106,49 @@ export default function App() {
     loadStoredJson<ChatInquiryRecord[]>(STORAGE_KEYS.chatInquiries, [])
   );
 
+  // Initial cloud synchronization with MongoDB Atlas
+  useEffect(() => {
+    // 1. Live Products Sync
+    fetch('/api/products')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setProducts(data);
+        }
+      })
+      .catch((err) => console.log('Using local products cache:', err));
+
+    // 2. Live Orders Sync
+    fetch('/api/orders')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setOrders(data);
+        }
+      })
+      .catch((err) => console.log('Using local orders cache:', err));
+
+    // 3. Live Showroom Visits Sync
+    fetch('/api/visits')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setShowroomVisits(data);
+        }
+      })
+      .catch((err) => console.log('Using local visits cache:', err));
+
+    // 4. Live Swatches Sync
+    fetch('/api/swatches')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setSwatchRequests(data);
+        }
+      })
+      .catch((err) => console.log('Using local swatches cache:', err));
+  }, []);
+
   useEffect(() => {
     saveStoredJson(STORAGE_KEYS.products, products);
   }, [products]);
@@ -134,9 +177,14 @@ export default function App() {
     saveStoredJson(STORAGE_KEYS.chatInquiries, chatInquiries);
   }, [chatInquiries]);
 
-  // Admin Product CRUD Actions
+  // Admin Product CRUD Actions synced to MongoDB Atlas
   const handleAdminAddProduct = (newProduct: Product) => {
     setProducts((prev) => [newProduct, ...prev]);
+    fetch('/api/products', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newProduct),
+    }).catch((err) => console.warn('Product add sync fallback:', err));
   };
 
   const handleAdminUpdateProduct = (updatedProduct: Product) => {
@@ -146,6 +194,11 @@ export default function App() {
     if (selectedDetailProduct?.id === updatedProduct.id) {
       setSelectedDetailProduct(updatedProduct);
     }
+    fetch('/api/products', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedProduct),
+    }).catch((err) => console.warn('Product update sync fallback:', err));
   };
 
   const handleAdminDeleteProduct = (productId: string) => {
@@ -154,11 +207,42 @@ export default function App() {
     if (selectedDetailProduct?.id === productId) {
       setSelectedDetailProduct(null);
     }
+    fetch(`/api/products?id=${productId}`, {
+      method: 'DELETE',
+    }).catch((err) => console.warn('Product delete sync fallback:', err));
   };
 
   const handleAdminResetCatalog = () => {
     setProducts(PRODUCTS);
     saveStoredJson(STORAGE_KEYS.products, PRODUCTS);
+  };
+
+  // Cloud synced order, swatch, and showroom handlers
+  const handleOrderSubmitted = (order: OrderRecord) => {
+    setOrders((prev) => [order, ...prev]);
+    fetch('/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(order),
+    }).catch((err) => console.warn('Order sync fallback:', err));
+  };
+
+  const handleSwatchRequestSubmitted = (record: SwatchRequestRecord) => {
+    setSwatchRequests((prev) => [record, ...prev]);
+    fetch('/api/swatches', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(record),
+    }).catch((err) => console.warn('Swatch sync fallback:', err));
+  };
+
+  const handleShowroomVisitSubmitted = (visit: ShowroomVisitRecord) => {
+    setShowroomVisits((prev) => [visit, ...prev]);
+    fetch('/api/visits', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(visit),
+    }).catch((err) => console.warn('Visit sync fallback:', err));
   };
 
   const handleAdminLogout = () => {
@@ -497,7 +581,7 @@ export default function App() {
           setIsCartOpen(false);
           setIsSampleKitOpen(true);
         }}
-        onOrderSubmitted={(order) => setOrders((prev) => [order, ...prev])}
+        onOrderSubmitted={handleOrderSubmitted}
       />
 
       {/* Saved Wishlist Slide-out Drawer */}
@@ -514,14 +598,14 @@ export default function App() {
       <SampleKitModal
         isOpen={isSampleKitOpen}
         onClose={() => setIsSampleKitOpen(false)}
-        onSubmitted={(record) => setSwatchRequests((prev) => [record, ...prev])}
+        onSubmitted={handleSwatchRequestSubmitted}
       />
 
       {/* Andhra Pradesh Showroom Visit Booking Modal */}
       <ShowroomVisitModal
         isOpen={isVisitModalOpen}
         onClose={() => setIsVisitModalOpen(false)}
-        onSubmitted={(visit) => setShowroomVisits((prev) => [visit, ...prev])}
+        onSubmitted={handleShowroomVisitSubmitted}
       />
 
       {/* Admin Studio Login Modal */}
