@@ -35,6 +35,7 @@ import {
   Palette,
   Check,
   ChevronRight,
+  Dices,
 } from 'lucide-react';
 import { Product, PRODUCTS as DEFAULT_PRODUCTS } from '../data/products';
 import {
@@ -206,6 +207,149 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     showNotification('Catalog JSON exported successfully.');
   };
 
+  const RANDOM_PRESETS: Array<{
+    name: string;
+    japaneseName: string;
+    category: 'living' | 'dining' | 'bedroom' | 'study' | 'lighting';
+    price: number;
+    dimensions: { width: number; depth: number; height: number; unit: string };
+    materialsSummary: string;
+    primaryImage: string;
+    description: string;
+  }> = [
+    {
+      name: 'Komorebi Fluted Media Credenza',
+      japaneseName: 'Solid White Oak & Ribbed Glass Media Console',
+      category: 'living',
+      price: 68500,
+      dimensions: { width: 180, depth: 45, height: 56, unit: 'cm' },
+      materialsSummary: 'Solid White Oak & Ribbed Tempered Glass',
+      primaryImage: 'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=1000&q=80',
+      description: 'A low-slung architectural media console with sliding fluted oak doors and concealed cable management channels.',
+    },
+    {
+      name: 'Kyoto Woven Cord Lounge Chair',
+      japaneseName: 'Steam-Bent Oak & Danish Rush Cord',
+      category: 'living',
+      price: 36500,
+      dimensions: { width: 78, depth: 76, height: 72, unit: 'cm' },
+      materialsSummary: 'Solid Nordic Oak & Natural Hand-Tensioned Paper Cord',
+      primaryImage: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1000&q=80',
+      description: 'Sculpted deep-seat occasional chair offering contoured lumbar support and breathable paper cord seating.',
+    },
+    {
+      name: 'Asahi Elliptical Dining Table',
+      japaneseName: 'Solid Walnut Oval 6-8 Seater Trestle Table',
+      category: 'dining',
+      price: 79500,
+      dimensions: { width: 210, depth: 100, height: 75, unit: 'cm' },
+      materialsSummary: 'Solid Black Walnut Trestle Top',
+      primaryImage: 'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?auto=format&fit=crop&w=1000&q=80',
+      description: 'An organic pill-shaped oval dining table crafted from solid American black walnut with gently rounded bullnose edges.',
+    },
+    {
+      name: 'Sora Hinoki Floating Platform Bed',
+      japaneseName: 'Japanese Hinoki Cypress Floating Low Platform',
+      category: 'bedroom',
+      price: 94000,
+      dimensions: { width: 195, depth: 215, height: 26, unit: 'cm' },
+      materialsSummary: 'Aromatic Solid Hinoki Cypress & Tatami Reed Core',
+      primaryImage: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1000&q=80',
+      description: 'A floating zero-gravity silhouette platform bed constructed using master Japanese sashimono mortise-tenon joinery.',
+    },
+    {
+      name: 'Takumi Architect Standing Desk',
+      japaneseName: 'Solid Oak & Dual-Motor Silent Lift Desk',
+      category: 'study',
+      price: 58000,
+      dimensions: { width: 150, depth: 75, height: 72, unit: 'cm' },
+      materialsSummary: 'Solid White Oak Slab & Commercial Dual-Motor Base',
+      primaryImage: 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=1000&q=80',
+      description: 'An ergonomic sit-stand desk combining a 35mm solid timber top with smooth, silent dual-motor height memory.',
+    },
+    {
+      name: 'Akari Scalloped Mulberry Pendant',
+      japaneseName: 'Hand-Pleated Mulberry Washi & Ash Ring Luminaire',
+      category: 'lighting',
+      price: 21000,
+      dimensions: { width: 48, depth: 48, height: 38, unit: 'cm' },
+      materialsSummary: 'Hand-Pleated Gifu Washi Paper & Natural Ash Frame',
+      primaryImage: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=1000&q=80',
+      description: 'Suspended ceiling luminaire featuring concentric washi paper baffles that soften illumination into warm ambient gradients.',
+    },
+    {
+      name: 'Mori Travertine Round Pedestal Table',
+      japaneseName: 'Honed Roman Travertine 4-Seater Bistro Table',
+      category: 'dining',
+      price: 64000,
+      dimensions: { width: 110, depth: 110, height: 75, unit: 'cm' },
+      materialsSummary: 'Honed Roman Travertine Stone & Solid Oak Plinth',
+      primaryImage: 'https://images.unsplash.com/photo-1530018607912-eff2daa1bac4?auto=format&fit=crop&w=1000&q=80',
+      description: 'A round pedestal dining table with a 30mm honed travertine top set upon a fluted solid timber pillar.',
+    },
+    {
+      name: 'Umi Fluted Bouclé Swivel Armchair',
+      japaneseName: 'Curved Bouclé Lounge Chair with 360-Swivel',
+      category: 'living',
+      price: 49500,
+      dimensions: { width: 84, depth: 82, height: 76, unit: 'cm' },
+      materialsSummary: 'Natural Wool Bouclé & Hidden Smooth Swivel Base',
+      primaryImage: 'https://images.unsplash.com/photo-1580481077195-c3a821a58875?auto=format&fit=crop&w=1000&q=80',
+      description: 'An inviting sculptural armchair with an organic cocoon shape and silent, heavy-duty 360-degree rotation.',
+    },
+  ];
+
+  const handleAddRandomProduct = () => {
+    const existingIds = new Set(products.map((p) => p.id));
+    const available = RANDOM_PRESETS.filter(
+      (p) => !existingIds.has(p.name.toLowerCase().replace(/[^a-z0-9]/g, '-'))
+    );
+    const preset =
+      available.length > 0
+        ? available[Math.floor(Math.random() * available.length)]
+        : RANDOM_PRESETS[Math.floor(Math.random() * RANDOM_PRESETS.length)];
+
+    const uniqueNum = Math.floor(100 + Math.random() * 900);
+    const uniqueId = `piece-${preset.category}-${uniqueNum}`;
+    const uniqueName = `${preset.name} (Series ${uniqueNum})`;
+
+    const randomItem: Product = {
+      id: uniqueId,
+      name: uniqueName,
+      japaneseName: preset.japaneseName,
+      category: preset.category,
+      price: preset.price,
+      badge: 'New Arrival',
+      dimensions: preset.dimensions,
+      weightKg: Math.floor(14 + Math.random() * 28),
+      materialsSummary: preset.materialsSummary,
+      woodOptions: [
+        { id: 'w-oak-natural', name: 'Untreated Natural Oak', type: 'wood', hex: '#D6BA96', extraPrice: 0 },
+        { id: 'w-oak-smoked', name: 'Smoked Nordic Oak', type: 'wood', hex: '#6D533E', extraPrice: 2800 },
+        { id: 'w-walnut-raw', name: 'Raw Black Walnut', type: 'wood', hex: '#4B382A', extraPrice: 5500 },
+      ],
+      fabricOptions: [
+        { id: 'f-sand-boucle', name: 'Sand Tactile Bouclé', type: 'fabric', hex: '#EFE7DA', extraPrice: 0 },
+        { id: 'f-raw-linen', name: 'Natural Belgian Linen', type: 'fabric', hex: '#DDD4C5', extraPrice: 1900 },
+      ],
+      primaryImage: preset.primaryImage,
+      secondaryImage: preset.primaryImage,
+      gallery: [preset.primaryImage],
+      description: preset.description,
+      architecturalNotes: 'Curated architectural piece crafted from certified sustainable timber for generational longevity.',
+      joinery: 'Traditional mortise-and-tenon sashimono joinery with natural plant-based oils.',
+      leadTime: 'Made to order (2-3 weeks)',
+      designer: 'Abhi Furniture Mall Studio',
+      rating: parseFloat((4.91 + Math.random() * 0.08).toFixed(2)),
+      reviewCount: Math.floor(14 + Math.random() * 28),
+      featured: true,
+    };
+
+    onAddProduct(randomItem);
+    showNotification(`Random item "${uniqueName}" added to catalog and synced to MongoDB!`);
+    setActiveTab('new-items');
+  };
+
   return (
     <div className="min-h-screen bg-[#FBF9F5] text-[#1C1C18] scroll-smooth pb-28 font-sans selection:bg-[#9E582C]/20 selection:text-[#804116]">
       {/* Top Sticky Header */}
@@ -277,6 +421,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset Defaults</span>
+            </button>
+
+            <button
+              onClick={handleAddRandomProduct}
+              className="inline-flex items-center space-x-1.5 px-4 py-2 text-xs font-semibold uppercase tracking-wider bg-[#2A2825] hover:bg-[#1C1C18] text-[#D4A373] hover:text-white border border-[#494643] rounded-[4px] shadow-sm transition-all cursor-pointer"
+              title="Add a random realistic furniture piece to the catalog and sync to MongoDB"
+            >
+              <Dices className="w-3.5 h-3.5 text-[#D4A373]" />
+              <span>+ Random Item</span>
             </button>
 
             <button
