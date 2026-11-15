@@ -1166,9 +1166,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           <span className="font-mono font-semibold text-[#804116]">
                             Order #{ord.id} · {new Date(ord.createdAt).toLocaleString()}
                           </span>
-                          <span className="px-2.5 py-0.5 rounded-[3px] bg-emerald-100 text-emerald-800 font-bold uppercase text-[10px]">
-                            {ord.status}
-                          </span>
+                          <div className="flex items-center space-x-2">
+                            {ord.paymentMethod && (
+                              <span className="px-2 py-0.5 rounded-[3px] bg-[#FFE7DB] text-[#804116] font-semibold text-[10px] uppercase border border-[#D9C2B7]">
+                                {ord.paymentMethod === 'upi' && `UPI: ${ord.paymentDetails?.upiId || 'Instant'}`}
+                                {ord.paymentMethod === 'card' && `Card: •••• ${ord.paymentDetails?.cardLast4 || '4242'}`}
+                                {ord.paymentMethod === 'netbanking' && `NetBanking: ${ord.paymentDetails?.bankName || 'Bank'}`}
+                                {ord.paymentMethod === 'emi' && `EMI: ${ord.paymentDetails?.emiMonths || 6}M (${ord.paymentDetails?.bankName || 'Bank'})`}
+                                {ord.paymentMethod === 'cod' && 'Pay on Delivery (COD)'}
+                              </span>
+                            )}
+                            <span className="px-2.5 py-0.5 rounded-[3px] bg-emerald-100 text-emerald-800 font-bold uppercase text-[10px]">
+                              {ord.paymentDetails?.paymentStatus === 'cod' ? 'COD' : ord.status}
+                            </span>
+                          </div>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

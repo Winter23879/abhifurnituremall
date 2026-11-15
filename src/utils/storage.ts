@@ -16,6 +16,14 @@ export interface OrderRecord {
   whiteGloveDelivery: number;
   total: number;
   promoCode?: string;
+  paymentMethod?: 'upi' | 'card' | 'netbanking' | 'emi' | 'cod';
+  paymentDetails?: {
+    upiId?: string;
+    cardLast4?: string;
+    bankName?: string;
+    emiMonths?: number;
+    paymentStatus?: 'paid' | 'pending' | 'cod';
+  };
   status: 'submitted';
 }
 

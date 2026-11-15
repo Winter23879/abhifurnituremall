@@ -83,6 +83,22 @@ const OrderSchema = new Schema(
     whiteGloveDelivery: { type: Number, default: 0 },
     total: { type: Number, required: true },
     promoCode: { type: String, default: '' },
+    paymentMethod: {
+      type: String,
+      enum: ['upi', 'card', 'netbanking', 'emi', 'cod'],
+      default: 'upi',
+    },
+    paymentDetails: {
+      upiId: { type: String, default: '' },
+      cardLast4: { type: String, default: '' },
+      bankName: { type: String, default: '' },
+      emiMonths: { type: Number, default: 0 },
+      paymentStatus: {
+        type: String,
+        enum: ['paid', 'pending', 'cod'],
+        default: 'paid',
+      },
+    },
     status: {
       type: String,
       enum: ['submitted', 'confirmed', 'in_production', 'dispatched', 'delivered'],
